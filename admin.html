@@ -1,0 +1,215 @@
+
+
+    <!-- SEU SCRIPT admin-script.js DEVE VIR DEPOIS DO SCRIPT DE VERIFICAÇÃO DE LOGIN -->
+   <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Adopet</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Estilos específicos do admin.html que você já tinha -->
+    <style>
+        .admin-container { padding: 20px; background-color: #fff; margin-top: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .admin-container h1, .admin-container h2 { text-align: center; color: var(--primary-color); }
+        .form-admin { max-width: 600px; margin: 20px auto; padding: 20px; background-color: #f9f9f9; border-radius: 8px; }
+        .form-admin .form-group { margin-bottom: 15px; }
+        .form-admin label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-admin input[type="text"], .form-admin input[type="number"], .form-admin select, .form-admin textarea {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;
+        }
+        .form-admin button {
+            background-color: var(--secondary-color); color: white; padding: 10px 15px; border: none;
+            border-radius: 5px; cursor: pointer; font-size: 1em; transition: background-color 0.3s;
+        }
+        .form-admin button:hover { background-color: #e07b00; }
+        .animais-lista table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .animais-lista th, .animais-lista td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .animais-lista th { background-color: var(--primary-color); color: white; }
+        .animais-lista .actions button { margin-right: 5px; padding: 5px 8px; font-size: 0.9em; }
+        .btn-edit { background-color: #f0ad4e; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+        .btn-delete { background-color: #d9534f; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+        #admin-content { display: none; } /* Oculta o conteúdo principal inicialmente */
+        #logout-button-container { text-align: right; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html"><img src="img/logo.png" alt="Adopet Logo"></a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="adocao.html">Adoção</a></li>
+                    <li><a href="feedback.html">Feedback</a></li>
+                    <li><a href="parcerias.html">Parcerias</a></li>
+                    <li><a href="admin.html">Admin</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <!-- O link de Admin pode ser removido ou gerenciado pelo estado de login -->
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div id="admin-access-denied" style="text-align:center; padding: 50px; display:none;">
+                <h1>Acesso Negado</h1>
+                <p>Você precisa estar logado para acessar esta página.</p>
+                <p><a href="login.html" class="page-link-button">Fazer Login</a></p>
+            </div>
+
+            <div id="admin-content"> <!-- Conteúdo principal do admin -->
+                <div id="logout-button-container">
+                     <span id="welcome-message" style="margin-right: 20px;"></span>
+                    <button id="logout-button" class="page-link-button" style="background-color: #d9534f;">Logout</button>
+                </div>
+                <div class="admin-container">
+                    <h1>Painel Administrativo - Animais</h1>
+                    <section id="form-section">
+                        <h2 id="form-title">Adicionar Novo Animal</h2>
+                        <form id="animal-form" class="form-admin">
+                            <input type="hidden" id="animal-id" name="animal-id">
+                            <div class="form-group">
+                                <label for="nome">Nome:</label>
+                                <input type="text" id="nome" name="nome" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="especie">Espécie:</label>
+                                <select id="especie" name="especie">
+                                    <option value="cao">Cão</option>
+                                    <option value="gato">Gato</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sexo">Sexo:</label>
+                                <select id="sexo" name="sexo">
+                                    <option value="Macho">Macho</option>
+                                    <option value="Fêmea">Fêmea</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="porte">Porte:</label>
+                                <select id="porte" name="porte">
+                                    <option value="Pequeno">Pequeno</option>
+                                    <option value="Médio">Médio</option>
+                                    <option value="Grande">Grande</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="idade">Idade (anos):</label>
+                                <input type="number" id="idade" name="idade" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="estado">Estado (UF):</label>
+                                <input type="text" id="estado" name="estado" maxlength="2">
+                            </div>
+                            <div class="form-group">
+                                <label for="cidade">Cidade:</label>
+                                <input type="text" id="cidade" name="cidade">
+                            </div>
+                            <div class="form-group">
+                                <label for="img">URL da Imagem (ex: img/nome_do_animal.jpg):</label>
+                                <input type="text" id="img" name="img">
+                            </div>
+                             <div class="form-group">
+                                <label for="descricao">Descrição Curta (ex: Sou brincalhão...):</label>
+                                <textarea id="descricao" name="descricao" rows="3"></textarea>
+                            </div>
+                            <button type="submit" id="save-button">Salvar</button>
+                            <button type="button" id="cancel-edit-button" style="display:none;">Cancelar Edição</button>
+                        </form>
+                    </section>
+                    <section class="animais-lista">
+                        <h2>Animais Cadastrados</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Espécie</th>
+                                    <th>Idade</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="animais-table-body">
+                                <!-- Linhas da tabela serão inseridas aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container"><p>© 2024 Adopet - Projeto Integrador.</p></div>
+    </footer>
+
+    <!-- SEU SCRIPT admin-script.js DEVE VIR DEPOIS DO SCRIPT DE VERIFICAÇÃO DE LOGIN -->
+    <script>
+    // SUAS CREDENCIAIS REAIS DO SUPABASE:
+    const SUPABASE_URL = 'https://fcozxgnwoubuiqinmwwr.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTkMPVq78MTdbJc-zCTqRTDsla7m7pc4sH3PFn0';
+
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.addEventListener('DOMContentLoaded', async function() {
+        const adminContent = document.getElementById('admin-content');
+        const accessDeniedMessage = document.getElementById('admin-access-denied');
+        const welcomeMessage = document.getElementById('welcome-message');
+        const logoutButton = document.getElementById('logout-button');
+
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+        if (sessionError) {
+            console.error("Erro ao obter sessão:", sessionError);
+            adminContent.style.display = 'none';
+            accessDeniedMessage.style.display = 'block';
+            if (logoutButton) logoutButton.style.display = 'none'; // Esconde logout se erro
+            return;
+        }
+
+        if (session && session.user) {
+            adminContent.style.display = 'block';
+            accessDeniedMessage.style.display = 'none';
+            if (welcomeMessage) {
+                const displayName = session.user.user_metadata?.nome_usuario || session.user.email;
+                welcomeMessage.textContent = `Bem-vindo(a), ${displayName}!`;
+            }
+
+            if (logoutButton) {
+                logoutButton.style.display = 'inline-block'; // Mostra o botão de logout
+                logoutButton.addEventListener('click', async function() {
+                    const { error } = await supabase.auth.signOut();
+                    if (error) {
+                        alert(`Erro ao fazer logout: ${error.message}`);
+                    } else {
+                        alert('Você foi desconectado.');
+                        window.location.href = 'login.html';
+                    }
+                });
+            }
+            // Chama a função para inicializar o admin do admin-script.js
+            if (typeof inicializarAdmin === "function") {
+                inicializarAdmin(supabase); // Passa o cliente supabase
+            } else {
+                console.error("Função inicializarAdmin não encontrada. Verifique a ordem dos scripts.");
+            }
+
+        } else {
+            adminContent.style.display = 'none';
+            accessDeniedMessage.style.display = 'block';
+            if (logoutButton) logoutButton.style.display = 'none'; // Esconde logout
+            // Opcional: redirecionar para login.html imediatamente
+            // setTimeout(() => { window.location.href = 'login.html'; }, 50); // Redirecionamento rápido
+        }
+    });
+</script>
+<script src="js/admin-script.js"></script> <!-- SEU admin-script.js DEPOIS -->
+    <!-- Coloque o seu admin-script.js aqui, se ele for separado -->
+   
+</body>
+</html>

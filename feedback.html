@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - Adopet</title>
+    <link rel="stylesheet" href="css/style.css">
+     <!-- Font Awesome para ícones (versão 6.0.0) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                 <a href="index.html">
+                    <img src="img/logo.png" alt="Adopet Logo">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="adocao.html">Adoção</a></li>
+                    <li><a href="feedback.html">Feedback</a></li>
+                    <li><a href="parcerias.html">Parcerias</a></li>
+                    <li><a href="admin.html">Admin</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="feedback-form-container">
+                <h1>Deixe seu Feedback ou Faça uma Pergunta</h1>
+                <p style="text-align: center; margin-bottom: 20px;">
+                    Sua opinião é muito importante para nós! Use o formulário abaixo para
+                    enviar suas sugestões, dúvidas ou elogios.
+                </p>
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Seu Nome:</label>
+                        <input type="text" id="name" name="name" required placeholder="Digite seu nome completo">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Seu Email:</label>
+                        <input type="email" id="email" name="email" required placeholder="exemplo@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Assunto:</label>
+                        <input type="text" id="subject" name="subject" placeholder="Sobre o que você quer falar?">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Sua Mensagem:</label>
+                        <textarea id="message" name="message" rows="6" required placeholder="Escreva sua mensagem aqui..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Enviar Mensagem</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-sections">
+                <div class="footer-section">
+                    <h3>Sobre o Adopet Cuida</h3>
+                    <ul>
+                        <li><a href="quemsomos.html">Quem Somos</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Dúvidas</h3>
+                    <ul>
+                        <li><a href="#">Atendimento</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Redes Sociais</h3>
+                    <ul class="social-links">
+                        <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="#"><i class="fab fa-youtube"></i></a></li>
+                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <p>© 2024 Adopet - Projeto Integrador. Idealizado por Isabela.</p>
+        </div>
+    </footer>
+ 
+    <script src="js/script.js"></script>
+</body>
+</html>

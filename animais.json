@@ -1,0 +1,12 @@
+[
+    { "id": 1, "nome": "Dandara", "especie": "cao", "estado": "SP", "cidade": "SaoPaulo", "sexo": "Fêmea", "porte": "Médio", "idade": 4, "img": "img/animal1.jpg" },
+    { "id": 2, "nome": "Lula", "especie": "cao", "estado": "SP", "cidade": "SaoPaulo", "sexo": "Fêmea", "porte": "Médio", "idade": 5, "img": "img/animal2.jpg" },
+    { "id": 3, "nome": "Antoim", "especie": "cao", "estado": "SP", "cidade": "Barueri", "sexo": "Fêmea", "porte": "Médio", "idade": 3, "img": "img/animal3.jpg" },
+    { "id": 4, "nome": "Bozo", "especie": "cao", "estado": "SP", "cidade": "Barueri", "sexo": "Macho", "porte": "Grande", "idade": 4, "img": "img/animal4.jpg" },
+    { "id": 5, "nome": "Cachorro", "especie": "cao", "estado": "SP", "cidade": "SaoPaulo", "sexo": "Macho", "porte": "Médio", "idade": 8, "img": "img/animal5.jpg" },
+    { "id": 6, "nome": "Gaga", "especie": "cao", "estado": "SP", "cidade": "SaoPaulo", "sexo": "Fêmea", "porte": "Médio", "idade": 2, "img": "img/animal6.jpg" },
+    { "id": 7, "nome": "Kiara", "especie": "gato", "estado": "RJ", "cidade": "RioDeJaneiro", "sexo": "Fêmea", "porte": "Pequeno", "idade": 6, "img": "img/gato01.jpg" },
+    { "id": 8, "nome": "Nani", "especie": "gato", "estado": "RJ", "cidade": "RioDeJaneiro", "sexo": "Fêmea", "porte": "Pequeno", "idade": 1, "img": "img/gato02.avif" },
+    { "id": 9, "nome": "Simba", "especie": "gato", "estado": "RJ", "cidade": "RioDeJaneiro", "sexo": "Macho", "porte": "Médio", "idade": 3, "img": "img/gato03.jpg!d" },
+    { "id": 10, "nome": "Menino", "especie": "gato", "estado": "RJ", "cidade": "RioDeJaneiro", "sexo": "Macho", "porte": "Médio", "idade": 4, "img": "img/gato04.jpg" }
+]

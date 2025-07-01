@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Adopet</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .auth-container { max-width: 400px; margin: 50px auto; padding: 30px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .auth-container h1 { text-align: center; color: var(--primary-color); margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .auth-container button { width: 100%; padding: 12px; background-color: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; }
+        .auth-container p { text-align: center; margin-top: 15px; }
+        .auth-container p a { color: var(--secondary-color); }
+        #message { text-align: center; margin-top: 15px; font-weight: bold; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo"><a href="index.html"><img src="img/logo.png" alt="Adopet Logo"></a></div>
+            <nav><ul><li><a href="index.html">Início</a></li><li><a href="register.html">Cadastro</a></li></ul></nav>
+        </div>
+    </header>
+    <main>
+        <div class="auth-container">
+            <h1>Login</h1>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email:</label>
+                    <input type="email" id="login-email" name="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Senha:</label>
+                    <input type="password" id="login-password" name="login-password" required>
+                </div>
+                <button type="submit">Entrar</button>
+            </form>
+            <div id="message"></div>
+            <p>Não tem uma conta? <a href="register.html">Cadastre-se</a></p>
+        </div>
+    </main>
+    <footer><div class="container"><p>© 2024 Adopet.</p></div></footer>
+
+    <script>
+        const SUPABASE_URL = 'https://fcozxgnwoubuiqinmwwr.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTkMPVq78MTdbJc-zCTqRTDsla7m7pc4sH3PFn0';
+        const supabase = supabase.createClient('https://fcozxgnwoubuiqinmwwr.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTkMPVq78MTdbJc-zCTqRTDsla7m7pc4sH3PFn0');
+
+        console.log("Login page: Script loaded, Supabase client potentially initialized.");
+
+        const loginForm = document.getElementById('login-form');
+        const messageDiv = document.getElementById('message');
+
+        if (loginForm && messageDiv) {
+            loginForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                console.log("Login form submitted.");
+                messageDiv.textContent = '';
+                messageDiv.className = '';
+
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+
+                if (!email || !password) {
+                    messageDiv.textContent = 'Email e senha são obrigatórios!';
+                    messageDiv.className = 'error'; return;
+                }
+
+                messageDiv.textContent = 'Entrando...';
+                console.log("Attempting to sign in with Supabase:", { email });
+
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
+
+                if (error) {
+                    console.error("Supabase signIn error:", error);
+                    messageDiv.textContent = `Erro: ${error.message}`;
+                    messageDiv.className = 'error';
+                } else if (data.user) {
+                    console.log("Supabase signIn success:", data);
+                    messageDiv.textContent = 'Login bem-sucedido! Redirecionando...';
+                    messageDiv.className = 'success';
+                    // O SDK do Supabase gerencia a sessão (geralmente no localStorage)
+                    setTimeout(() => { window.location.href = 'admin.html'; }, 1500);
+                } else {
+                    console.warn("Supabase signIn: Resposta inesperada ou usuário não confirmado", data);
+                    messageDiv.textContent = 'Credenciais inválidas, usuário não confirmado ou ocorreu um problema.';
+                    messageDiv.className = 'error';
+                }
+            });
+        } else {
+            console.error("Login page: Formulário 'login-form' ou 'message' div não encontrado.");
+            if(messageDiv) {
+                messageDiv.textContent = "Erro: Formulário de login não encontrado na página.";
+                messageDiv.className = "error";
+            } else {
+                alert("Erro crítico: Formulário de login não carregado.");
+            }
+        }
+    </script>
+</body>
+</html>
