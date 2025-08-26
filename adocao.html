@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adoção - Adopet</title>
     <link rel="stylesheet" href="css/style.css">
-    <!-- Font Awesome para ícones (versão 6.0.0) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Importa a biblioteca do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <header>
@@ -23,7 +22,7 @@
             </div>
             <nav>
                 <ul>
-                  <li><a href="index.html">Início</a></li>
+                    <li><a href="index.html">Início</a></li>
                     <li><a href="adocao.html">Adoção</a></li>
                     <li><a href="feedback.html">Feedback</a></li>
                     <li><a href="parcerias.html">Parcerias</a></li>
@@ -36,87 +35,58 @@
 
     <main>
         <div class="container">
-
             <section class="adocao-intro">
-                 <h1>Animais Disponíveis para Adoção</h1>
-                 <p class="section-intro-text">
-                    Encontre seu novo amigo peludo explorando os animais disponíveis abaixo. Use os filtros para refinar sua busca!
-                 </p>
-            </section>
-
-            <!-- SEÇÃO DE FILTRO E GRADE MOVida DA PAGINA INICIAL PARA A PAGINA ADOCAO -->
-            <section class="filtro-busca">
-                <div class="container">
-                    <select name="estado" id="estado">
-                        <option value="">Estado</option>
-                        <option value="SP">São Paulo</option>
-                        <option value="RJ">Rio de Janeiro</option>
-                        <!-- Adicione mais opções de estado conforme necessário -->
-                    </select>
-                    <select name="cidade" id="cidade">
-                        <option value="">Cidade</option>
-                        <option value="SaoPaulo">São Paulo</option>
-                        <option value="Barueri">Barueri</option>
-                        <option value="RioDeJaneiro">Rio de Janeiro</option>
-                        <!-- Adicione mais opções de cidade conforme necessário -->
-                    </select>
-                    <select name="especie" id="especie">
-                        <option value="">Espécie</option>
-                        <option value="cao">Cão</option>
-                        <option value="gato">Gato</option>
-                    </select>
-                    <button class="page-link-button" id="btnFiltrar">Buscar</button>
-                </div>
+                <h1>Encontre seu Novo Amigo</h1>
+                <p class="section-intro-text">
+                    Cada um desses anjinhos tem uma história e todos estão em busca de um lar cheio de amor e carinho.
+                    Explore os perfis abaixo e veja quem conquista o seu coração!
+                </p>
             </section>
 
             <section class="animais-disponiveis" id="animais-disponiveis">
                 <div class="container">
-                    <h2>Resultados da Busca</h2> <!-- Título ajustado para a página de adoção -->
+                    <h2>Todos os Nossos Anjinhos</h2>
                     <div class="animais-grid" id="animais-grid">
-                        <!-- Cards de animais serão inseridos aqui pelo JavaScript -->
+                        <!-- Os cards dos animais serão inseridos aqui pelo JavaScript -->
+                        <p>Carregando animais...</p> 
                     </div>
                 </div>
             </section>
 
-            <!-- Formulário de Adoção (Inicialmente Oculto) -->
+            <!-- AQUI ESTÁ A MÁGICA: A SEÇÃO DO FORMULÁRIO QUE SEU JS PRECISA -->
             <section class="adocao-form-section" id="adocao-form-section" style="display: none;">
-                <div class="container">
-                    <h2>Formulário de Adoção</h2>
-                    <p class="section-intro-text">
-                        Por favor, preencha o formulário abaixo para dar o primeiro passo
-                        para adotar um de nossos amiguinhos!
-                    </p>
-                    <form class="adocao-form" id="adocao-form">
-                        <div class="form-group">
-                            <label for="nome">Nome Completo:</label>
-                            <input type="text" id="nome" name="nome" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="cpf">CPF:</label>
-                            <input type="text" id="cpf" name="cpf" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                         <div class="form-group">
-                            <label for="telefone">Telefone:</label>
-                            <input type="tel" id="telefone" name="telefone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="endereco">Endereço:</label>
-                            <input type="text" id="endereco" name="endereco">
-                        </div>
-                        <div class="form-group">
-                            <label for="motivo">Por que você quer adotar?</label>
-                            <textarea id="motivo" name="motivo" rows="4"></textarea>
-                        </div>
-                        <button type="submit" class="page-link-button">Enviar Solicitação</button>
-                        <button type="button" class="cancel-button" id="cancel-button">Cancelar</button>
-                    </form>
-                </div>
-            </section>
+                <h2 id="adocao-form-title">Formulário de Adoção</h2>
+                <p class="section-intro-text">
+                    Ficamos felizes com seu interesse! Por favor, preencha o formulário abaixo com atenção.
+                    Nosso time analisará seu perfil e entrará em contato.
+                </p>
+                <form class="adocao-form" id="adocao-form">
+    <!-- NOVO CAMPO ESCONDIDO PARA GUARDAR O ID DO ANIMAL -->
+    <input type="hidden" id="animal-id-hidden-input" name="animal_id">
 
+    <div class="form-group">
+        <label for="nome-adotante">Seu Nome Completo:</label>
+        <input type="text" id="nome-adotante" name="nome_completo" required placeholder="Digite seu nome">
+    </div>
+    <div class="form-group">
+        <label for="email-adotante">Seu Melhor E-mail:</label>
+        <input type="email" id="email-adotante" name="email" required placeholder="exemplo@email.com">
+    </div>
+    <div class="form-group">
+        <label for="telefone-adotante">Telefone (com DDD):</label>
+        <input type="tel" id="telefone-adotante" name="telefone" required placeholder="(XX) XXXXX-XXXX">
+    </div>
+    <div class="form-group">
+        <label for="mensagem-adotante">Por que você gostaria de adotar este pet?</label>
+        <textarea id="mensagem-adotante" name="mensagem" rows="5" required placeholder="Conte-nos um pouco sobre você, sua casa e sua motivação."></textarea>
+    </div>
+
+    <div class="form-buttons">
+        <button type="submit">Enviar Pedido de Adoção</button>
+        <button type="button" class="cancel-button" id="cancel-button">Cancelar</button>
+    </div>
+</form>
+            </section>
         </div>
     </main>
 
@@ -145,31 +115,18 @@
                     </ul>
                 </div>
             </div>
-            <p>© 2024 Adopet - Projeto Integrador. Idealizado por Nicole.</p>
+            <p>© 2024 Adopet - Projeto Integrador. </p>
         </div>
     </footer>
-   <script>
-    // SUAS CREDENCIAIS REAIS DO SUPABASE:
-    const SUPABASE_URL = 'https://fcozxgnwoubuiqinmwwr.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTkMPVq78MTdbJc-zCTqRTDsla7m7pc4sH3PFn0';
-
-    // Cria uma instância global ou específica para esta página
-    const supabaseGlobalClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Chama a função do script.js para carregar animais, passando o cliente Supabase
-        if (document.getElementById('animais-grid') && typeof carregarAnimaisParaAdocao === "function") {
-            carregarAnimaisParaAdocao(supabaseGlobalClient);
-        }
-
-        // A lógica do carousel e outros scripts que estavam aqui podem continuar
-        // Exemplo:
-        if (document.getElementById('carousel-track')) {
-            // ... sua lógica de carousel ...
-        }
-    });
-</script>
-<script src="js/script.js"></script> <!-- SEU script.js DEPOIS -->
+    
+       <script>
+        // Inicializa o cliente Supabase com a URL CORRETA
+       const SUPABASE_URL = 'https://fcozxgnwoubuqiynmwwr.supabase.co'; // <--- CORRIGIDO AQUI
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTkMPVq78MTdbJc-zCTqRTDsla7m7pc4sH3PFn0';
+        const { createClient } = supabase;
+        const supabaseGlobalClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    </script>
+    <script src="js/script.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>

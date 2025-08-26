@@ -1,228 +1,225 @@
-document.addEventListener('DOMContentLoaded', async function() { // Tornamos o listener principal async
+// js/script.js
 
-    // --- Lógica para a página de Adoção (adocao.html) ---
+// Adiciona um "ouvinte" que espera todo o conteúdo do HTML ser carregado
+document.addEventListener('DOMContentLoaded', function() {
+
+    // --- LÓGICA DO CARROSSEL (PÁGINA INICIAL) ---
+    const carouselTrack = document.getElementById('carousel-track');
+    if (carouselTrack) {
+        console.log("Página Inicial - Inicializando lógica do carousel.");
+        const nextButton = document.getElementById('carousel-next');
+        const prevButton = document.getElementById('carousel-prev');
+        
+        // Adiciona um evento de clique para levar para a página de adoção
+        const carouselAdoptButtons = carouselTrack.querySelectorAll('.adopt-button');
+        carouselAdoptButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                window.location.href = 'adocao.html';
+            });
+        });
+
+        // (A lógica de mover o carrossel que você já tinha pode ser mantida aqui se desejar)
+    }
+
+
+    // --- LÓGICA DA PÁGINA DE ADOÇÃO ---
     const animaisGrid = document.getElementById('animais-grid');
-    const adocaoFormSection = document.getElementById('adocao-form-section');
-    const cancelButton = document.getElementById('cancel-button'); // Botão de cancelar do formulário
+    if (animaisGrid) {
+        // Se estamos na página de adoção, busca os animais do Supabase
+        buscarEExibirAnimais();
 
-    // Variável para armazenar o cliente Supabase (será inicializado no HTML de adocao.html)
-    // E passada para as funções que precisam dele.
-    // Vamos assumir que uma variável global `supabaseGlobalClient` é criada no HTML da página de adoção.
-    // Exemplo:
-    // <script>
-    //   const SUPABASE_URL = 'SUA_URL'; const SUPABASE_ANON_KEY = 'SUA_CHAVE';
-    //   const supabaseGlobalClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    // </script>
-    // <script src="js/script.js"></script>
+        // Configura os botões do formulário de adoção
+        configurarFormularioAdoção();
+    }
 
-    let todosOsAnimaisDoSupabase = []; // Array para guardar os animais após carregar do Supabase
+});
 
-    // Função para buscar os animais do Supabase (NOVA)
-    async function buscarAnimaisDoSupabase(supabaseClient) {
-        if (!supabaseClient) {
-            console.error("Cliente Supabase não está disponível para buscarAnimaisDoSupabase.");
-            if (animaisGrid) animaisGrid.innerHTML = '<p style="color:red;">Erro de configuração.</p>';
-            return [];
-        }
-        if (animaisGrid) animaisGrid.innerHTML = '<p>Buscando amiguinhos...</p>';
 
-        const { data: animais, error } = await supabaseClient
+/**
+ * Busca os animais do Supabase e chama a função para exibi-los na tela.
+ */
+async function buscarEExibirAnimais() {
+    const grid = document.getElementById('animais-grid');
+    grid.innerHTML = '<p>Buscando amiguinhos...</p>';
+
+    // `supabaseGlobalClient` é definido no HTML, antes de chamar este script
+    if (typeof supabaseGlobalClient === 'undefined') {
+        console.error("Cliente Supabase não encontrado. Verifique o script no HTML.");
+        grid.innerHTML = '<p style="color:red;">Erro de configuração. Não foi possível conectar ao banco de dados.</p>';
+        return;
+    }
+
+    try {
+        const { data: animais, error } = await supabaseGlobalClient
             .from('animais')
             .select('*')
             .order('nome', { ascending: true });
 
         if (error) {
-            console.error('Erro ao buscar animais do Supabase:', error);
-            if (animaisGrid) animaisGrid.innerHTML = `<p style="color:red;">Não foi possível carregar os animais. (${error.message})</p>`;
-            return [];
+            throw error; // Joga o erro para o bloco catch
         }
-        return animais || [];
+
+        exibirAnimaisNaGrid(animais);
+
+    } catch (error) {
+        console.error('Erro ao buscar animais do Supabase:', error);
+        grid.innerHTML = `<p style="color:red;">Não foi possível carregar os animais. Tente novamente mais tarde.</p>`;
+    }
+}
+
+
+/**
+ * Recebe uma lista de animais e cria os cards no HTML.
+ * @param {Array} animais - A lista de objetos de animais.
+ */
+function exibirAnimaisNaGrid(animais) {
+    const grid = document.getElementById('animais-grid');
+    grid.innerHTML = ''; // Limpa a mensagem "Carregando..."
+
+    if (!animais || animais.length === 0) {
+        grid.innerHTML = '<p>Nenhum animalzinho encontrado. Volte mais tarde!</p>';
+        return;
     }
 
-    // Função para criar o card do animal (SUA FUNÇÃO EXISTENTE)
-    function criarCardAnimal(animal) { // Esta é a sua função original, verifique os campos
+    animais.forEach(animal => {
         const card = document.createElement('div');
         card.className = 'animal-card';
-        // Ajuste os ícones e a estrutura se necessário, para bater com os dados do Supabase
+        // Usamos atributos 'data-*' para guardar informações do animal no próprio HTML
+        card.setAttribute('data-id', animal.id);
+        card.setAttribute('data-nome', animal.nome);
+
         card.innerHTML = `
-            <img src="${animal.img || 'img/placeholder_animal.png'}" alt="${animal.nome}">
+            <img src="${animal.img || 'img/placeholder_animal.png'}" alt="Foto de ${animal.nome}">
             <h3>${animal.nome}</h3>
-            <p><i class="fas fa-venus-mars"></i> ${animal.sexo || 'N/I'}</p> <!-- Ícone para sexo era fas fa-venus -->
-            <p><i class="fas fa-paw"></i> ${animal.porte || 'N/I'}</p>
-            <p><i class="fas fa-birthday-cake"></i> ${animal.idade !== null ? animal.idade : 'N/I'} ano(s)</p>
-            <p><i class="fas fa-map-marker-alt"></i> ${animal.cidade || 'N/I'}, ${animal.estado || 'N/I'}</p>
-            <button class="adopt-button page-link-button" data-id="${animal.id}" data-nome="${animal.nome}">Quero Adotar</button>
+            <p><i class="fas fa-venus-mars"></i> ${animal.sexo || 'Não informado'}</p>
+            <p><i class="fas fa-paw"></i> Porte ${animal.porte || 'Não informado'}</p>
+            <p><i class="fas fa-birthday-cake"></i> ${animal.idade !== null ? `${animal.idade} ano(s)` : 'Idade não informada'}</p>
+            <p><i class="fas fa-map-marker-alt"></i> ${animal.cidade || 'Cidade não informada'}, ${animal.estado || ''}</p>
+            <button class="adopt-button page-link-button">Quero Adotar!</button>
         `;
-        // Adicionando listener ao botão "Quero Adotar" dentro do card
-        const adoptButton = card.querySelector('.adopt-button');
-        if (adoptButton) {
-            adoptButton.addEventListener('click', function() {
-                const animalId = this.dataset.id;
-                const animalNome = this.dataset.nome;
-                console.log(`Botão "Quero Adotar" clicado para o animal ID: ${animalId}, Nome: ${animalNome} (Grade na Adoção)`);
-                if (adocaoFormSection) {
-                    adocaoFormSection.style.display = 'block';
-                    adocaoFormSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    // Poderia preencher um campo hidden com o ID do animal no formulário de adoção aqui
-                } else {
-                    console.error("Elemento #adocao-form-section NÃO encontrado para exibir.");
-                }
-            });
-        }
-        return card;
-    }
+        grid.appendChild(card);
+    });
 
-    // Função para exibir os animais na grade (SUA FUNÇÃO EXISTENTE)
-    function exibirAnimais(animaisParaExibir) {
-        if (!animaisGrid) return; // Segurança
-        animaisGrid.innerHTML = ''; // Limpa os resultados anteriores
-        if (animaisParaExibir.length === 0) {
-            animaisGrid.innerHTML = '<p>Nenhum animal encontrado com os critérios selecionados.</p>';
-            return;
-        }
-        animaisParaExibir.forEach(animal => {
-            const card = criarCardAnimal(animal);
-            animaisGrid.appendChild(card);
+    // Depois que todos os cards estão na tela, adicionamos o evento de clique aos botões
+    adicionarEventoAosBotoesAdotar();
+}
+
+
+/**
+ * Encontra todos os botões "Quero Adotar!" e adiciona o evento de clique
+ * para mostrar o formulário de adoção.
+ */
+function adicionarEventoAosBotoesAdotar() {
+    const botoesAdotar = document.querySelectorAll('.animal-card .adopt-button');
+    const formSection = document.getElementById('adocao-form-section');
+    const formTitle = document.getElementById('adocao-form-title');
+
+    botoesAdotar.forEach(botao => {
+        botao.addEventListener('click', (event) => {
+            const card = event.target.closest('.animal-card');
+            const animalNome = card.dataset.nome; // Pega o nome do atributo data-nome
+
+            // Atualiza o título do formulário
+            formTitle.textContent = `Formulário de Adoção para ${animalNome}`;
+            
+            // Exibe o formulário e rola a tela até ele
+            formSection.style.display = 'block';
+            formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
-        // A lógica de adicionar listeners aos botões foi movida para dentro de criarCardAnimal
-    }
+    });
 
+    botoesAdotar.forEach(botao => {
+    botao.addEventListener('click', (event) => {
+        const card = event.target.closest('.animal-card');
+        const animalNome = card.dataset.nome;
+        const animalId = card.dataset.id; // Pega o ID do animal
 
-    // --- Lógica para a página de Adoção (adocao.html) ---
-    if (animaisGrid) { // Verifica se a grade existe, indicando que é a página adocao.html
-        console.log("Página de Adoção - Inicializando lógica da grade e formulário.");
-        const estadoSelect = document.getElementById('estado');
-        const cidadeSelect = document.getElementById('cidade');
-        const especieSelect = document.getElementById('especie');
-        const btnFiltrar = document.getElementById('btnFiltrar');
-
-        if (adocaoFormSection) console.log("Elemento #adocao-form-section encontrado.");
-        else console.error("Elemento #adocao-form-section NÃO encontrado!");
-
-        if (cancelButton) console.log("Elemento #cancel-button encontrado.");
-        else console.error("Elemento #cancel-button NÃO encontrado!");
-
-
-        // Adiciona listener ao botão Filtrar na página de Adoção
-        if (btnFiltrar) {
-             btnFiltrar.addEventListener('click', function() {
-                 console.log("Botão Filtrar clicado.");
-                 const estadoSelecionado = estadoSelect ? estadoSelect.value : "";
-                 const cidadeSelecionada = cidadeSelect ? cidadeSelect.value : "";
-                 const especieSelecionada = especieSelect ? especieSelect.value : "";
-
-                 // Filtra a lista `todosOsAnimaisDoSupabase` que já foi carregada
-                 const animaisFiltrados = todosOsAnimaisDoSupabase.filter(animal => {
-                     let match = true;
-                     if (estadoSelecionado && (!animal.estado || animal.estado.toUpperCase() !== estadoSelecionado.toUpperCase())) {
-                         match = false;
-                     }
-                     if (cidadeSelecionada && (!animal.cidade || animal.cidade.toLowerCase() !== cidadeSelecionada.toLowerCase())) {
-                         match = false;
-                     }
-                     if (especieSelecionada && animal.especie !== especieSelecionada) {
-                         match = false;
-                     }
-                     return match;
-                 });
-                 exibirAnimais(animaisFiltrados);
-                 console.log(`Filtro aplicado. Exibindo ${animaisFiltrados.length} animais.`);
-             });
-        }
-
-        // Adiciona listener ao botão Cancelar do formulário
-        if (cancelButton && adocaoFormSection) {
-             cancelButton.addEventListener('click', function() {
-                  console.log("Botão Cancelar formulário clicado. Ocultando formulário.");
-                  adocaoFormSection.style.display = 'none';
-                  const form = document.getElementById('adocao-form');
-                  if (form) form.reset();
-             });
-        }
-
-        // Lógica para o formulário de adoção (envio)
-        const formAdocao = document.getElementById('adocao-form');
-        if (formAdocao) {
-            formAdocao.addEventListener('submit', function(event) {
-                event.preventDefault();
-                const nomeAdotante = document.getElementById('nome').value; // Supondo ID 'nome' no form
-                alert(`Obrigado, ${nomeAdotante}! Sua solicitação de adoção foi enviada (simulação). Entraremos em contato.`);
-                if(adocaoFormSection) adocaoFormSection.style.display = 'none';
-                formAdocao.reset();
-            });
-        }
-
-
-        // CARREGAR OS DADOS DO SUPABASE E EXIBIR INICIALMENTE
-        // Esta chamada espera que `supabaseGlobalClient` seja definido no HTML da página `adocao.html`
-        if (typeof supabaseGlobalClient !== 'undefined') {
-            todosOsAnimaisDoSupabase = await buscarAnimaisDoSupabase(supabaseGlobalClient);
-            exibirAnimais(todosOsAnimaisDoSupabase); // Exibe todos inicialmente
-            console.log(`Carregados ${todosOsAnimaisDoSupabase.length} animais do Supabase.`);
-        } else {
-            console.error("supabaseGlobalClient não está definido. Não foi possível carregar animais da página de adoção.");
-            if(animaisGrid) animaisGrid.innerHTML = "<p style='color:red;'>Erro de configuração: Falha ao carregar dados dos animais.</p>";
-        }
-    }
-
-
-    // --- Lógica para a página Inicial (index.html) - Contém o Carousel ---
-    const carouselTrack = document.getElementById('carousel-track');
-    if (carouselTrack) {
-        console.log("Página Inicial - Inicializando lógica do carousel.");
-        const slides = Array.from(carouselTrack.children);
-        const nextButton = document.getElementById('carousel-next');
-        const prevButton = document.getElementById('carousel-prev');
-        let currentSlideIndex = 0;
-        let slideWidth = 0;
-
-        function setupCarousel() {
-            if (slides.length > 0) {
-                const slideStyle = getComputedStyle(slides[0]);
-                const marginHorizontal = parseFloat(slideStyle.marginLeft) + parseFloat(slideStyle.marginRight);
-                slideWidth = slides[0].getBoundingClientRect().width + marginHorizontal;
-                slides.forEach((slide, index) => {
-                    slide.style.left = slideWidth * index + 'px';
-                });
-                moveSlide(carouselTrack, currentSlideIndex);
-            }
-        }
-
-        function moveSlide(track, targetSlideIndex) {
-            if (slides.length > 0 && track) {
-                const targetPosition = slides[targetSlideIndex].style.left;
-                track.style.transform = 'translateX(-' + targetPosition + ')';
-                currentSlideIndex = targetSlideIndex;
-            }
-        }
-
-        if (nextButton && prevButton && carouselTrack) {
-            nextButton.addEventListener('click', () => {
-                if (slides.length > 0) {
-                    currentSlideIndex = (currentSlideIndex + 1) % slides.length;
-                    moveSlide(carouselTrack, currentSlideIndex);
-                }
-            });
-            prevButton.addEventListener('click', () => {
-                if (slides.length > 0) {
-                    currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
-                    moveSlide(carouselTrack, currentSlideIndex);
-                }
-            });
-
-            const carouselAdoptButtons = carouselTrack.querySelectorAll('.adopt-button');
-            carouselAdoptButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    window.location.href = 'adocao.html';
-                });
-            });
-        }
+        // Atualiza o título do formulário
+        formTitle.textContent = `Formulário de Adoção para ${animalNome}`;
         
-        if (slides.length > 0) { // Só configura se houver slides
-            setupCarousel();
-            window.addEventListener('resize', setupCarousel);
-        } else {
-            console.warn("Carousel track encontrado, mas sem slides dentro dele.");
-        }
-    }
+        // NOVO: Coloca o ID do animal no campo escondido
+        document.getElementById('animal-id-hidden-input').value = animalId;
+
+        // Exibe o formulário e rola a tela até ele
+        formSection.style.display = 'block';
+        formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
 });
+
+
+
+
+/**
+ * Configura o funcionamento dos botões e do envio do formulário de adoção.
+ */
+function configurarFormularioAdoção() {
+    const formSection = document.getElementById('adocao-form-section');
+    const formAdocao = document.getElementById('adocao-form');
+    const cancelButton = document.getElementById('cancel-button');
+
+    // Botão de Cancelar
+    if (cancelButton) {
+        cancelButton.addEventListener('click', () => {
+            formSection.style.display = 'none'; // Esconde a seção do formulário
+            formAdocao.reset(); // Limpa os campos preenchidos
+        });
+    }
+
+    // Envio do formulário
+    if (formAdocao) {
+        formAdocao.addEventListener('submit', (event) => {
+            event.preventDefault(); // Impede o comportamento padrão de recarregar a página
+            
+            const nomeAdotante = document.getElementById('nome-adotante').value;
+            alert(`Obrigado, ${nomeAdotante}! Seu pedido de adoção foi enviado com sucesso. Entraremos em contato em breve.`);
+            
+            // Esconde e limpa o formulário após o envio
+            formSection.style.display = 'none';
+            formAdocao.reset();
+        });
+    }
+
+    if (formAdocao) {
+    formAdocao.addEventListener('submit', async (event) => { // Tornamos a função async
+        event.preventDefault(); // Impede o recarregamento da página
+
+        const submitButton = formAdocao.querySelector('button[type="submit"]');
+        submitButton.disabled = true; // Desabilita o botão para evitar cliques duplos
+        submitButton.textContent = 'Enviando...';
+
+        try {
+            // 1. Coletar os dados do formulário
+            const dadosPedido = {
+                nome_adotante: document.getElementById('nome-adotante').value,
+                email_adotante: document.getElementById('email-adotante').value,
+                telefone_adotante: document.getElementById('telefone-adotante').value,
+                mensagem_motivacao: document.getElementById('mensagem-adotante').value,
+                animal_id: document.getElementById('animal-id-hidden-input').value,
+                // O status será 'pendente' por padrão, como definimos no Supabase
+            };
+
+            // 2. Enviar para o Supabase
+            const { error } = await supabaseGlobalClient
+                .from('pedidos_adocao')
+                .insert([dadosPedido]);
+
+            if (error) {
+                throw error; // Joga o erro para o bloco catch
+            }
+
+            // 3. Sucesso!
+            alert('Pedido de adoção enviado com sucesso! Nossa equipe analisará e entrará em contato em breve.');
+            formSection.style.display = 'none';
+            formAdocao.reset();
+
+        } catch (error) {
+            console.error('Erro ao enviar pedido de adoção:', error);
+            alert(`Houve um erro ao enviar seu pedido: ${error.message}. Por favor, tente novamente.`);
+        } finally {
+            // Reabilita o botão, independentemente do resultado
+            submitButton.disabled = false;
+            submitButton.textContent = 'Enviar Pedido de Adoção';
+        }
+    });
+}
+        }}
