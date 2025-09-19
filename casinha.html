@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Casinha - Adopet</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome para ícones (versão 6.0.0) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+   <header>
+    <div class="container">
+        <div class="logo">
+            <a href="index.html">
+                <img src="img/logo.png" alt="Adopet Logo">
+            </a>
+        </div>
+
+        <!-- NOVO CONTAINER PARA NAV E AÇÕES DO USUÁRIO -->
+        <div class="nav-actions-container">
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="adocao.html">Adoção</a></li>
+                    <li><a href="feedback.html">Contato</a></li>
+                    <li><a href="parcerias.html">Parcerias</a></li>
+                     <li id="admin-link-li" style="display: none;"><a href="admin.html">Admin</a></li>
+                    <!-- REMOVEMOS OS LINKS DE ADMIN/LOGIN DAQUI -->
+                </ul>
+            </nav>
+
+            <!-- AÇÕES DO USUÁRIO QUE MUDAM DINAMICAMENTE -->
+           <!-- NOVO user-actions COM A CASINHA -->
+<div class="user-actions">
+    <!-- Ícone da Casinha (sempre visível) -->
+    <a href="casinha.html" id="casinha-icon" title="Minha Casinha">
+        <i class="fas fa-home"></i>
+        <span id="casinha-contador" class="contador">0</span>
+    </a>
+    
+    <!-- Ícone do Perfil (controlado pelo JS) -->
+    <a href="perfil.html" id="user-profile-icon" style="display: none;" title="Meu Perfil">
+        <i class="fas fa-user-circle"></i>
+    </a>
+    
+    <!-- Botão de Login (controlado pelo JS) -->
+    <a href="login.html" id="login-link-button" class="header-login-btn">Login</a>
+</div>
+        </div>
+    </div>
+</header>
+    <main>
+        <div class="container">
+            <section class="casinha-section" style="padding: 40px 0;">
+               <!-- TEXTO NOVO E MELHORADO -->
+                <h1><i class="fas fa-home"></i> Minha Casinha</h1>
+                        <p class="section-intro-text">
+                             Este é o seu espaço para salvar os perfis dos pets que mais tocaram seu coração. Pense na casinha como uma área de "favoritos". Aqui, você pode revisar suas escolhas com calma antes de iniciar o processo de adoção.
+                        </p>
+
+                <div id="casinha-content" style="display: none;">
+                    <!-- A grid com os animais aparecerá aqui dentro, como antes -->
+                    <div id="casinha-grid" class="animais-grid"></div>
+                </div>
+                
+                <!-- Mensagem para usuário não logado -->
+                <div id="login-prompt-casinha" style="display: none; text-align: center; padding: 30px; background-color: #fff3cd; border-radius: 8px;">
+                    <h2>Quase lá!</h2>
+                    <p>Você precisa fazer login para ver os pets que você salvou e iniciar o processo de adoção.</p>
+                    <a href="login.html" class="page-link-button">Fazer Login ou Cadastrar</a>
+                </div>
+
+                <!-- Conteúdo da casinha para usuário logado -->
+                <div id="casinha-content" style="display: none;">
+                    <p class="section-intro-text">Estes são os amiguinhos que você selecionou. Que tal dar o próximo passo?</p>
+                    <div id="casinha-grid" class="animais-grid">
+                        <!-- Os pets selecionados aparecerão aqui -->
+                    </div>
+                </div>
+                <div id="casinha-vazia-msg" style="display: none; text-align: center; padding: 40px; background-color: #f8f9fa; border-radius: 8px;">
+                        <h2 style="margin-bottom: 20px;">
+                            <strong>Casinha Vazia?</strong> 
+                            <a href="adocao.html" style="text-decoration: none; color: var(--secondary-color);">Adicione alguns animais!</a>
+                        </h2>
+                        <p>Clique em "Adicionar à Casinha" nos perfis dos pets para salvá-los aqui.</p>
+                    </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-sections">
+                <div class="footer-section">
+                    <h3>Sobre o Adopet Cuida</h3>
+                    <ul>
+                        <li><a href="quemsomos.html">Quem Somos</a></li> 
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Dúvidas</h3>
+                    <ul>
+                        <li><a href="feedback.html">Atendimento</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Redes Sociais</h3>
+                    <ul class="social-links">
+    <li><a href="contato.html#redes-sociais"><i class="fab fa-facebook"></i></a></li>
+    <li><a href="contato.html#redes-sociais"><i class="fab fa-instagram"></i></a></li>
+    <li><a href="contato.html#redes-sociais"><i class="fab fa-youtube"></i></a></li>
+    <li><a href="contato.html#redes-sociais"><i class="fab fa-twitter"></i></a></li>
+</ul>
+                </div>
+            </div>
+            <p>© 2024 Adopet - Projeto Integrador. </p>
+        </div>
+    </footer>
+        
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/auth-ui.js"></script>
+    <script src="js/casinha-global.js"></script> <!-- << ADICIONADO AQUI -->
+    <script>
+        // Cria um cliente Supabase específico para esta página.
+        // Usamos o mesmo nome 'supabaseClient' que o casinha-script.js espera.
+        const supabaseClient = supabase.createClient(
+            'https://fcozxgnwoubuqiynmwwr.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTkMPVq78MTdbJc-zCTqRTDsla7m7pc4sH3PFn0'
+        );
+    </script>
+    <script src="js/casinha-script.js"></script>
+</body>
+</body>
+</html>

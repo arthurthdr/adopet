@@ -12,27 +12,51 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <header>
-        <div class="container">
-            <div class="logo">
-                <a href="index.html">
-                    <img src="img/logo.png" alt="Adopet Logo">
-                </a>
-            </div>
+    <div class="container">
+        <div class="logo">
+            <a href="index.html">
+                <img src="img/logo.png" alt="Adopet Logo">
+            </a>
+        </div>
+
+        <!-- NOVO CONTAINER PARA NAV E AÇÕES DO USUÁRIO -->
+        <div class="nav-actions-container">
             <nav>
                 <ul>
                     <li><a href="index.html">Início</a></li>
                     <li><a href="adocao.html">Adoção</a></li>
-                    <li><a href="feedback.html">Feedback</a></li>
+                    <li><a href="feedback.html">Contato</a></li>
                     <li><a href="parcerias.html">Parcerias</a></li>
-                    <li><a href="admin.html">Admin</a></li>
-                    <li><a href="login.html">Login</a></li>
+                     <li id="admin-link-li" style="display: none;"><a href="admin.html">Admin</a></li>
+                    <!-- REMOVEMOS OS LINKS DE ADMIN/LOGIN DAQUI -->
                 </ul>
             </nav>
+
+            <!-- AÇÕES DO USUÁRIO QUE MUDAM DINAMICAMENTE -->
+           <!-- NOVO user-actions COM A CASINHA -->
+<div class="user-actions">
+    <!-- Ícone da Casinha (sempre visível) -->
+    <a href="casinha.html" id="casinha-icon" title="Minha Casinha">
+        <i class="fas fa-home"></i>
+        <span id="casinha-contador" class="contador">0</span>
+    </a>
+    
+    <!-- Ícone do Perfil (controlado pelo JS) -->
+    <a href="perfil.html" id="user-profile-icon" style="display: none;" title="Meu Perfil">
+        <i class="fas fa-user-circle"></i>
+    </a>
+    
+    <!-- Botão de Login (controlado pelo JS) -->
+    <a href="login.html" id="login-link-button" class="header-login-btn">Login</a>
+</div>
         </div>
-    </header>
+    </div>
+</header>
+    
 
     <main>
         <section class="hero">
@@ -90,7 +114,7 @@
                     <div class="carousel-track" id="carousel-track">
                         <!-- Slides de animais definidos diretamente no HTML -->
                          <div class="carousel-slide">
-                            <img src="img/cachorro01.jpg" alt="Antoin">
+                            <img src="img/animal1.jpg" alt="Antoin">
                             <h3>Antoin</h3>
                             <p><i class="fas fa-venus-mars"></i> Macho</p>
                             <p><i class="fas fa-paw"></i> Pequeno</p>
@@ -99,7 +123,7 @@
                             <button class="adopt-button">Quero Adotar!</button>
                         </div>
                          <div class="carousel-slide">
-                            <img src="img/cachorro02.jpg" alt="Toquinho">
+                            <img src="img/animal2.jpg" alt="Toquinho">
                             <h3>Toquinho</h3>
                             <p><i class="fas fa-venus-mars"></i> Macho</p>
                             <p><i class="fas fa-paw"></i> Pequeno</p>
@@ -108,7 +132,7 @@
                             <button class="adopt-button">Quero Adotar!</button>
                         </div>
                          <div class="carousel-slide">
-                            <img src="img/cachorro03.jpg" alt="Marina Rui Barbosa">
+                            <img src="img/animal3.jpg" alt="Marina Rui Barbosa">
                             <h3>Marina Rui Barbosa</h3>
                             <p><i class="fas fa-venus-mars"></i> Fêmea</p>
                             <p><i class="fas fa-paw"></i> Médio</p>
@@ -117,7 +141,7 @@
                             <button class="adopt-button">Quero Adotar!</button>
                         </div>
                          <div class="carousel-slide">
-                            <img src="img/cachorro04.png" alt="Maya Massafera">
+                            <img src="img/animal4.jpg" alt="Maya Massafera">
                             <h3>Maya Massafera</h3>
                             <p><i class="fas fa-venus-mars"></i> Fêmea</p>
                             <p><i class="fas fa-paw"></i> Pequeno</p>
@@ -126,7 +150,7 @@
                             <button class="adopt-button">Quero Adotar!</button>
                         </div>
                          <div class="carousel-slide">
-                            <img src="img/cachorro05.jpg" alt="Rayane">
+                            <img src="img/animal5.jpg" alt="Rayane">
                             <h3>Rayane</h3>
                             <p><i class="fas fa-venus-mars"></i> Fêmea</p>
                             <p><i class="fas fa-paw"></i> Grande</p>
@@ -135,7 +159,7 @@
                             <button class="adopt-button">Quero Adotar!</button>
                         </div>
                          <div class="carousel-slide">
-                            <img src="img/cachorro06.jpg" alt="Livia">
+                            <img src="img/animal6.jpg" alt="Livia">
                             <h3>Livia</h3>
                             <p><i class="fas fa-venus-mars"></i> Fêmea</p>
                             <p><i class="fas fa-paw"></i> Médio</p>
@@ -162,7 +186,7 @@
                             <button class="adopt-button">Quero Adotar!</button>
                         </div>
                          <div class="carousel-slide">
-                            <img src="img/gato03.jpg!d" alt="Simba">
+                            <img src="img/gato03.jpg" alt="Simba">
                             <h3>Simba</h3>
                             <p><i class="fas fa-venus-mars"></i> Macho</p>
                              <p><i class="fas fa-paw"></i> Médio</p>
@@ -195,29 +219,35 @@
                 <div class="footer-section">
                     <h3>Sobre o Adopet Cuida</h3>
                     <ul>
-                        <li><a href="quem-somos.html">Quem Somos</a></li>
+                        <li><a href="quemsomos.html">Quem Somos</a></li> 
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Dúvidas</h3>
                     <ul>
-                        <li><a href="#">Atendimento</a></li>
+                        <li><a href="feedback.html">Atendimento</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Redes Sociais</h3>
                     <ul class="social-links">
-                        <li><a href="#"><i class="fab fa-facebook"></i></a></li>
-                        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-                        <li><a href="#"><i class="fab fa-youtube"></i></a></li>
-                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                    </ul>
+    <li><a href="contato.html#redes-sociais"><i class="fab fa-facebook"></i></a></li>
+    <li><a href="contato.html#redes-sociais"><i class="fab fa-instagram"></i></a></li>
+    <li><a href="contato.html#redes-sociais"><i class="fab fa-youtube"></i></a></li>
+    <li><a href="contato.html#redes-sociais"><i class="fab fa-twitter"></i></a></li>
+</ul>
                 </div>
             </div>
             <p>© 2024 Adopet - Projeto Integrador. </p>
         </div>
     </footer>
- 
+ <script src="js/admin-script.js" defer></script>
+   <!-- PRIMEIRO, A BIBLIOTECA SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- SEGUNDO, O NOSSO NOVO SCRIPT DE UI -->
+    <script src="js/auth-ui.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/casinha-global.js"></script>
 </body>
 </html>

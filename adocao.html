@@ -14,24 +14,46 @@
 </head>
 <body>
     <header>
-        <div class="container">
-            <div class="logo">
-                <a href="index.html">
-                    <img src="img/logo.png" alt="Adopet Logo">
-                </a>
-            </div>
+    <div class="container">
+        <div class="logo">
+            <a href="index.html">
+                <img src="img/logo.png" alt="Adopet Logo">
+            </a>
+        </div>
+
+        <!-- NOVO CONTAINER PARA NAV E AÇÕES DO USUÁRIO -->
+        <div class="nav-actions-container">
             <nav>
                 <ul>
                     <li><a href="index.html">Início</a></li>
                     <li><a href="adocao.html">Adoção</a></li>
-                    <li><a href="feedback.html">Feedback</a></li>
+                    <li><a href="feedback.html">Contato</a></li>
                     <li><a href="parcerias.html">Parcerias</a></li>
-                    <li><a href="admin.html">Admin</a></li>
-                    <li><a href="login.html">Login</a></li>
+                     <li id="admin-link-li" style="display: none;"><a href="admin.html">Admin</a></li>
+                    <!-- REMOVEMOS OS LINKS DE ADMIN/LOGIN DAQUI -->
                 </ul>
             </nav>
+
+            <!-- AÇÕES DO USUÁRIO QUE MUDAM DINAMICAMENTE -->
+            <!-- NOVO user-actions COM A CASINHA -->
+<div class="user-actions">
+    <!-- Ícone da Casinha (sempre visível) -->
+    <a href="casinha.html" id="casinha-icon" title="Minha Casinha">
+        <i class="fas fa-home"></i>
+        <span id="casinha-contador" class="contador">0</span>
+    </a>
+    
+    <!-- Ícone do Perfil (controlado pelo JS) -->
+    <a href="perfil.html" id="user-profile-icon" style="display: none;" title="Meu Perfil">
+        <i class="fas fa-user-circle"></i>
+    </a>
+    
+    <!-- Botão de Login (controlado pelo JS) -->
+    <a href="login.html" id="login-link-button" class="header-login-btn">Login</a>
+</div>
         </div>
-    </header>
+    </div>
+</header>
 
     <main>
         <div class="container">
@@ -90,35 +112,39 @@
         </div>
     </main>
 
-    <footer>
+        <footer>
         <div class="container">
             <div class="footer-sections">
                 <div class="footer-section">
                     <h3>Sobre o Adopet Cuida</h3>
                     <ul>
-                        <li><a href="quem-somos.html">Quem Somos</a></li>
+                        <li><a href="quemsomos.html">Quem Somos</a></li> 
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Dúvidas</h3>
                     <ul>
-                        <li><a href="#">Atendimento</a></li>
+                        <li><a href="feedback.html">Atendimento</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Redes Sociais</h3>
                     <ul class="social-links">
-                        <li><a href="#"><i class="fab fa-facebook"></i></a></li>
-                        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-                        <li><a href="#"><i class="fab fa-youtube"></i></a></li>
-                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="contato.html#redes-sociais"><i class="fab fa-facebook"></i></a></li>
+                        <li><a href="contato.html#redes-sociais"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="contato.html#redes-sociais"><i class="fab fa-youtube"></i></a></li>
+                        <li><a href="contato.html#redes-sociais"><i class="fab fa-twitter"></i></a></li>
                     </ul>
                 </div>
             </div>
             <p>© 2024 Adopet - Projeto Integrador. </p>
         </div>
     </footer>
-    
+    <script src="js/admin-script.js" defer></script>
+ 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>->
+    <script src="js/auth-ui.js"></script>
+    <script src="js/casinha-global.js"></script>
        <script>
         // Inicializa o cliente Supabase com a URL CORRETA
        const SUPABASE_URL = 'https://fcozxgnwoubuqiynmwwr.supabase.co'; // <--- CORRIGIDO AQUI
@@ -127,6 +153,6 @@
         const supabaseGlobalClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     </script>
     <script src="js/script.js"></script>
-    <script src="js/script.js"></script>
+ 
 </body>
 </html>

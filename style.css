@@ -847,3 +847,177 @@ footer p {
     }
 
 }
+
+/* Estilos para o Cabeçalho com Ícone de Perfil */
+
+/* Novo container que agrupa a navegação e as ações do usuário */
+.nav-actions-container {
+    display: flex;
+    align-items: center;
+    gap: 30px; /* Espaçamento entre o menu e o ícone/botão */
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+}
+
+/* Estilo do Ícone de Perfil */
+#user-profile-icon {
+    color: white;
+    font-size: 2em; /* Tamanho do ícone (ajuste se necessário) */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+#user-profile-icon:hover {
+    color: var(--secondary-color); /* Laranja no hover */
+}
+
+/* Estilo do Botão de Login no Cabeçalho */
+.header-login-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.header-login-btn:hover {
+    background-color: #e07b00; /* Laranja mais escuro no hover */
+}
+
+/* Ajustes de responsividade para o novo layout do header */
+@media (max-width: 768px) {
+    .nav-actions-container {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+/* Correção para garantir que o botão de login seja sempre visível quando necessário */
+
+/* A classe .header-login-btn já existe, vamos apenas garantir sua visibilidade */
+.header-login-btn {
+    display: inline-block; /* Usar inline-block é melhor para botões com padding */
+    visibility: visible;
+    opacity: 1;
+}
+
+/* O JavaScript vai colocar display: none. Quando não tiver, esta regra se aplica. */
+
+/* Estilos para a Casinha */
+
+#casinha-icon {
+    position: relative;
+    color: white;
+    font-size: 2em;
+    text-decoration: none;
+    margin-right: 20px; /* Espaço entre a casinha e o ícone de perfil */
+}
+
+.contador {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: var(--secondary-color);
+    color: white;
+    border-radius: 50%;
+    padding: 2px 7px;
+    font-size: 0.6em;
+    font-weight: bold;
+    border: 2px solid var(--primary-color);
+}
+
+/* ===== ESTILOS DO MODAL DE CONFIRMAÇÃO ===== */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Garante que o display seja flex por padrão */
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    /* O estado escondido é controlado por opacity e visibility */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: var(--bg-white);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.show {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important; /* Adicionado para garantir */
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 1.5em;
+}
+
+.modal-content p {
+    margin-bottom: 25px;
+    font-size: 1.1em;
+    color: var(--text-color);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-actions button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.modal-actions button:hover {
+    transform: translateY(-2px);
+}
+
+.modal-btn-confirm {
+    background-color: #d9534f; /* Vermelho para ações destrutivas */
+    color: white;
+}
+.modal-btn-confirm:hover {
+    background-color: #c9302c;
+}
+
+.modal-btn-cancel {
+    background-color: #ccc;
+    color: #333;
+}
+.modal-btn-cancel:hover {
+    background-color: #bbb;
+}

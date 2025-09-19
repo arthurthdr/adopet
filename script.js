@@ -3,22 +3,61 @@
 // Adiciona um "ouvinte" que espera todo o conteúdo do HTML ser carregado
 document.addEventListener('DOMContentLoaded', function() {
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const animalIdParaAdotar = urlParams.get('animalId');
+
+    if (animalIdParaAdotar) {
+        console.log("ID do animal recebido da casinha:", animalIdParaAdotar);
+        // Se um ID foi passado, busca os dados desse animal e abre o formulário
+        abrirFormularioParaAnimalEspecifico(animalIdParaAdotar);
+    }
     // --- LÓGICA DO CARROSSEL (PÁGINA INICIAL) ---
     const carouselTrack = document.getElementById('carousel-track');
     if (carouselTrack) {
         console.log("Página Inicial - Inicializando lógica do carousel.");
         const nextButton = document.getElementById('carousel-next');
         const prevButton = document.getElementById('carousel-prev');
+        const slides = Array.from(carouselTrack.children);
         
-        // Adiciona um evento de clique para levar para a página de adoção
+        // Verifica se há slides antes de continuar
+        if (slides.length === 0) return;
+
+        // Tenta obter a largura do slide + margem
+        const slideStyle = window.getComputedStyle(slides[0]);
+        const slideMarginRight = parseFloat(slideStyle.marginRight);
+        const slideWidth = slides[0].getBoundingClientRect().width + slideMarginRight;
+        let currentIndex = 0;
+
+        // Função para mover os slides
+        const moveToSlide = (track, targetIndex) => {
+            const amountToMove = slideWidth * targetIndex;
+            track.style.transform = 'translateX(-' + amountToMove + 'px)';
+            currentIndex = targetIndex;
+        };
+        
+        // Evento de clique no botão "Próximo"
+        nextButton.addEventListener('click', () => {
+            // *** ALTERAÇÃO PARA O LOOP INFINITO ***
+            // Em vez de parar, usamos o operador de módulo (%) para voltar ao início.
+            const nextIndex = (currentIndex + 1) % slides.length;
+            moveToSlide(carouselTrack, nextIndex);
+        });
+        
+        // Evento de clique no botão "Anterior"
+        prevButton.addEventListener('click', () => {
+            // *** ALTERAÇÃO PARA O LOOP INFINITO ***
+            // Se estiver no primeiro, vai para o último.
+            const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+            moveToSlide(carouselTrack, prevIndex);
+        });
+
+        // Adiciona um evento de clique nos botões "Quero Adotar" do carrossel
         const carouselAdoptButtons = carouselTrack.querySelectorAll('.adopt-button');
         carouselAdoptButtons.forEach(button => {
             button.addEventListener('click', function() {
                 window.location.href = 'adocao.html';
             });
         });
-
-        // (A lógica de mover o carrossel que você já tinha pode ser mantida aqui se desejar)
     }
 
 
@@ -72,35 +111,36 @@ async function buscarEExibirAnimais() {
  * Recebe uma lista de animais e cria os cards no HTML.
  * @param {Array} animais - A lista de objetos de animais.
  */
+// DENTRO DO script.js -> exibirAnimaisNaGrid
+
 function exibirAnimaisNaGrid(animais) {
     const grid = document.getElementById('animais-grid');
-    grid.innerHTML = ''; // Limpa a mensagem "Carregando..."
+    grid.innerHTML = '';
 
     if (!animais || animais.length === 0) {
-        grid.innerHTML = '<p>Nenhum animalzinho encontrado. Volte mais tarde!</p>';
+        grid.innerHTML = '<p>Nenhum animalzinho encontrado.</p>';
         return;
     }
 
     animais.forEach(animal => {
         const card = document.createElement('div');
         card.className = 'animal-card';
-        // Usamos atributos 'data-*' para guardar informações do animal no próprio HTML
+        // ADICIONAMOS MAIS DATA ATTRIBUTES AQUI
         card.setAttribute('data-id', animal.id);
         card.setAttribute('data-nome', animal.nome);
+        card.setAttribute('data-porte', animal.porte); // Exemplo de outro dado
 
         card.innerHTML = `
             <img src="${animal.img || 'img/placeholder_animal.png'}" alt="Foto de ${animal.nome}">
             <h3>${animal.nome}</h3>
-            <p><i class="fas fa-venus-mars"></i> ${animal.sexo || 'Não informado'}</p>
             <p><i class="fas fa-paw"></i> Porte ${animal.porte || 'Não informado'}</p>
             <p><i class="fas fa-birthday-cake"></i> ${animal.idade !== null ? `${animal.idade} ano(s)` : 'Idade não informada'}</p>
-            <p><i class="fas fa-map-marker-alt"></i> ${animal.cidade || 'Cidade não informada'}, ${animal.estado || ''}</p>
-            <button class="adopt-button page-link-button">Quero Adotar!</button>
+            <!-- MUDAMOS O BOTÃO -->
+            <button class="adopt-button page-link-button">Adicionar à Casinha <i class="fas fa-plus-circle"></i></button>
         `;
         grid.appendChild(card);
     });
 
-    // Depois que todos os cards estão na tela, adicionamos o evento de clique aos botões
     adicionarEventoAosBotoesAdotar();
 }
 
@@ -109,44 +149,45 @@ function exibirAnimaisNaGrid(animais) {
  * Encontra todos os botões "Quero Adotar!" e adiciona o evento de clique
  * para mostrar o formulário de adoção.
  */
+// DENTRO DO script.js
+
+function adicionarPetNaCasinha(animalData) {
+    const casinha = getCasinha();
+
+    // Verifica se o animal já está na casinha para não adicionar duplicado
+    const existe = casinha.some(animal => animal.id === animalData.id);
+
+    if (existe) {
+        alert(`${animalData.nome} já está na sua casinha!`);
+    } else {
+        casinha.push(animalData);
+        saveCasinha(casinha);
+        alert(`${animalData.nome} foi adicionado(a) à sua casinha!`);
+    }
+}
+
+// SUBSTITUA A FUNÇÃO ANTIGA POR ESTA
 function adicionarEventoAosBotoesAdotar() {
     const botoesAdotar = document.querySelectorAll('.animal-card .adopt-button');
-    const formSection = document.getElementById('adocao-form-section');
-    const formTitle = document.getElementById('adocao-form-title');
-
+    
     botoesAdotar.forEach(botao => {
         botao.addEventListener('click', (event) => {
             const card = event.target.closest('.animal-card');
-            const animalNome = card.dataset.nome; // Pega o nome do atributo data-nome
-
-            // Atualiza o título do formulário
-            formTitle.textContent = `Formulário de Adoção para ${animalNome}`;
             
-            // Exibe o formulário e rola a tela até ele
-            formSection.style.display = 'block';
-            formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Precisamos recriar o objeto do animal a partir dos dados no card
+            // Para isso, precisamos adicionar mais atributos data-* no HTML do card
+            const animalData = {
+                id: card.dataset.id,
+                nome: card.dataset.nome,
+                img: card.querySelector('img').src,
+                porte: card.dataset.porte
+                // Adicione outros 'data-*' se quiser mostrar mais infos na casinha
+            };
+            
+            adicionarPetNaCasinha(animalData);
         });
     });
-
-    botoesAdotar.forEach(botao => {
-    botao.addEventListener('click', (event) => {
-        const card = event.target.closest('.animal-card');
-        const animalNome = card.dataset.nome;
-        const animalId = card.dataset.id; // Pega o ID do animal
-
-        // Atualiza o título do formulário
-        formTitle.textContent = `Formulário de Adoção para ${animalNome}`;
-        
-        // NOVO: Coloca o ID do animal no campo escondido
-        document.getElementById('animal-id-hidden-input').value = animalId;
-
-        // Exibe o formulário e rola a tela até ele
-        formSection.style.display = 'block';
-        formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-});
-
-
+}
 
 
 /**
@@ -167,59 +208,46 @@ function configurarFormularioAdoção() {
 
     // Envio do formulário
     if (formAdocao) {
-        formAdocao.addEventListener('submit', (event) => {
-            event.preventDefault(); // Impede o comportamento padrão de recarregar a página
-            
-            const nomeAdotante = document.getElementById('nome-adotante').value;
-            alert(`Obrigado, ${nomeAdotante}! Seu pedido de adoção foi enviado com sucesso. Entraremos em contato em breve.`);
-            
-            // Esconde e limpa o formulário após o envio
-            formSection.style.display = 'none';
-            formAdocao.reset();
+        formAdocao.addEventListener('submit', async (event) => { // Tornamos a função async
+            event.preventDefault(); // Impede o recarregamento da página
+
+            const submitButton = formAdocao.querySelector('button[type="submit"]');
+            submitButton.disabled = true; // Desabilita o botão para evitar cliques duplos
+            submitButton.textContent = 'Enviando...';
+
+            try {
+                // 1. Coletar os dados do formulário
+                const dadosPedido = {
+                    nome_adotante: document.getElementById('nome-adotante').value,
+                    email_adotante: document.getElementById('email-adotante').value,
+                    telefone_adotante: document.getElementById('telefone-adotante').value,
+                    mensagem_motivacao: document.getElementById('mensagem-adotante').value,
+                    animal_id: document.getElementById('animal-id-hidden-input').value,
+                    // O status será 'pendente' por padrão, como definimos no Supabase
+                };
+
+                // 2. Enviar para o Supabase
+                const { error } = await supabaseGlobalClient
+                    .from('pedidos_adocao')
+                    .insert([dadosPedido]);
+
+                if (error) {
+                    throw error; // Joga o erro para o bloco catch
+                }
+
+                // 3. Sucesso!
+                alert('Pedido de adoção enviado com sucesso! Nossa equipe analisará e entrará em contato em breve.');
+                formSection.style.display = 'none';
+                formAdocao.reset();
+
+            } catch (error) {
+                console.error('Erro ao enviar pedido de adoção:', error);
+                alert(`Houve um erro ao enviar seu pedido: ${error.message}. Por favor, tente novamente.`);
+            } finally {
+                // Reabilita o botão, independentemente do resultado
+                submitButton.disabled = false;
+                submitButton.textContent = 'Enviar Pedido de Adoção';
+            }
         });
     }
-
-    if (formAdocao) {
-    formAdocao.addEventListener('submit', async (event) => { // Tornamos a função async
-        event.preventDefault(); // Impede o recarregamento da página
-
-        const submitButton = formAdocao.querySelector('button[type="submit"]');
-        submitButton.disabled = true; // Desabilita o botão para evitar cliques duplos
-        submitButton.textContent = 'Enviando...';
-
-        try {
-            // 1. Coletar os dados do formulário
-            const dadosPedido = {
-                nome_adotante: document.getElementById('nome-adotante').value,
-                email_adotante: document.getElementById('email-adotante').value,
-                telefone_adotante: document.getElementById('telefone-adotante').value,
-                mensagem_motivacao: document.getElementById('mensagem-adotante').value,
-                animal_id: document.getElementById('animal-id-hidden-input').value,
-                // O status será 'pendente' por padrão, como definimos no Supabase
-            };
-
-            // 2. Enviar para o Supabase
-            const { error } = await supabaseGlobalClient
-                .from('pedidos_adocao')
-                .insert([dadosPedido]);
-
-            if (error) {
-                throw error; // Joga o erro para o bloco catch
-            }
-
-            // 3. Sucesso!
-            alert('Pedido de adoção enviado com sucesso! Nossa equipe analisará e entrará em contato em breve.');
-            formSection.style.display = 'none';
-            formAdocao.reset();
-
-        } catch (error) {
-            console.error('Erro ao enviar pedido de adoção:', error);
-            alert(`Houve um erro ao enviar seu pedido: ${error.message}. Por favor, tente novamente.`);
-        } finally {
-            // Reabilita o botão, independentemente do resultado
-            submitButton.disabled = false;
-            submitButton.textContent = 'Enviar Pedido de Adoção';
-        }
-    });
 }
-        }}
