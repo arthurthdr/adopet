@@ -1,22 +1,15 @@
-// js/admin-script.js
-
-// A função `inicializarAdmin` é chamada uma única vez pelo admin.html
 async function inicializarAdmin(supabaseClient) {
     if (!supabaseClient) {
         console.error("Admin-script: Cliente Supabase não recebido!");
         document.getElementById('admin-content').innerHTML = "<p style='color:red;'>Erro crítico.</p>";
         return;
     }
-
-    // --- 1. REFERÊNCIAS AOS ELEMENTOS DO DOM ---
     const animalForm = document.getElementById('animal-form');
     const animaisTableBody = document.getElementById('animais-table-body');
     const animalIdInput = document.getElementById('animal-id');
     const formTitle = document.getElementById('form-title');
     const cancelEditButton = document.getElementById('cancel-edit-button');
     const confirmModal = document.getElementById('confirm-modal');
-
-    // --- 2. DEFINIÇÕES DE FUNÇÕES ---
 
     function resetarFormulario() {
         animalForm.reset();
@@ -60,10 +53,7 @@ async function inicializarAdmin(supabaseClient) {
         }
     }
 
-    // js/admin-script.js
-
 function showConfirmationModal(title, text) {
-    // Adicionamos logs em cada passo crítico
     console.log("1. showConfirmationModal foi chamada.");
     
     return new Promise((resolve) => {
@@ -73,10 +63,9 @@ function showConfirmationModal(title, text) {
         const modalConfirmBtnEl = document.getElementById('modal-confirm-btn');
         const modalCancelBtnEl = document.getElementById('modal-cancel-btn');
 
-        // Verificação crucial: Os elementos existem?
         if (!modalEl || !modalTitleEl || !modalTextEl || !modalConfirmBtnEl || !modalCancelBtnEl) {
             console.error("ERRO FATAL: Um ou mais elementos do modal não foram encontrados no HTML. Verifique os IDs!");
-            resolve(false); // Resolve como falso para não travar a aplicação
+            resolve(false); 
             return;
         }
         console.log("2. Todos os elementos do modal foram encontrados.");
@@ -98,10 +87,6 @@ function showConfirmationModal(title, text) {
     });
 }
 
-    // --- 3. EVENT LISTENERS ---
-    // Ligados apenas UMA VEZ quando a página inicializa.
-
-    // Listener para o ENVIO do formulário (Criar ou Atualizar)
     animalForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const dadosAnimal = {
@@ -133,10 +118,7 @@ function showConfirmationModal(title, text) {
         }
     });
 
-    // Listener de DELEGAÇÃO para os CLICKS na tabela
-    // js/admin-script.js
-
-// Listener de DELEGAÇÃO para os CLICKS na tabela
+   
 animaisTableBody.addEventListener('click', async (event) => {
     const button = event.target.closest('button');
     if (!button) return;
@@ -144,13 +126,11 @@ animaisTableBody.addEventListener('click', async (event) => {
     const animalId = button.dataset.id;
     if (!animalId) return;
 
-    // --- LOGS DE DIAGNÓSTICO ---
     console.log("--------------------");
     console.log("Botão clicado!");
     console.log("ID do animal:", animalId);
     console.log("Classes do botão:", button.className);
     
-    // --- Lógica para o botão EDITAR ---
     if (button.classList.contains('btn-edit')) {
         console.log("--> Ação detectada: EDITAR");
         
@@ -175,13 +155,12 @@ animaisTableBody.addEventListener('click', async (event) => {
         animalForm.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // --- Lógica para o botão EXCLUIR ---
     if (button.classList.contains('btn-delete')) {
         console.log("--> Ação detectada: EXCLUIR");
         
         const confirmed = await showConfirmationModal('Confirmar Exclusão', `Tem certeza que deseja excluir o animal com ID ${animalId}?`);
         
-        console.log("Modal foi confirmado?", confirmed); // Log para ver o resultado do modal
+        console.log("Modal foi confirmado?", confirmed); 
         
         if (confirmed) {
             const { error } = await supabaseClient.from('animais').delete().eq('id', animalId);
@@ -195,12 +174,7 @@ animaisTableBody.addEventListener('click', async (event) => {
     }
 });
 
-    // Listener para o botão de CANCELAR edição
     cancelEditButton.addEventListener('click', resetarFormulario);
-    
-    // (A LÓGICA DE PEDIDOS DE ADOÇÃO PODE SER ADICIONADA AQUI SE NECESSÁRIO)
-
-    // --- 4. INICIALIZAÇÃO ---
-    // Chama a função para carregar os dados iniciais na tabela.
+   
     await carregarAnimais();
 }

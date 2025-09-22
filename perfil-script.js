@@ -1,6 +1,4 @@
-// js/perfil-script.js
 
-// 1. Inicializa o cliente Supabase
 const SUPABASE_URL = 'https://fcozxgnwoubuqiynmwwr.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTDsla7m7pc4sH3PFn0';
 const { createClient } = supabase;
@@ -15,7 +13,6 @@ const logoutButton = document.getElementById('logout-button');
 
 let currentUser = null;
 
-// 3. Função para carregar os dados do perfil
 async function loadProfile(user) {
     try {
         const { data, error } = await supabaseClient
@@ -24,7 +21,7 @@ async function loadProfile(user) {
             .eq('id', user.id)
             .single();
 
-        if (error && error.code !== 'PGRST116') { // PGRST116 = 'no rows found'
+        if (error && error.code !== 'PGRST116') { 
             throw error;
         }
 
@@ -45,7 +42,6 @@ async function loadProfile(user) {
     }
 }
 
-// 4. Função para atualizar o perfil
 profileForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const submitButton = profileForm.querySelector('button[type="submit"]');
@@ -64,7 +60,6 @@ profileForm.addEventListener('submit', async (event) => {
         const { error } = await supabaseClient.from('profiles').upsert(updates);
         if (error) throw error;
         alert('Perfil atualizado com sucesso!');
-        // Atualiza a imagem de avatar imediatamente
         document.getElementById('avatar-img').src = updates.avatar_url || 'img/avatar_placeholder.png';
     } catch (error) {
         alert('Erro ao atualizar o perfil: ' + error.message);
@@ -73,8 +68,6 @@ profileForm.addEventListener('submit', async (event) => {
         submitButton.textContent = 'Atualizar Perfil';
     }
 });
-
-// 5. Lógica de Autenticação e Logout
 supabaseClient.auth.onAuthStateChange((event, session) => {
     if (session && session.user) {
         currentUser = session.user;

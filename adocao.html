@@ -9,7 +9,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Importa a biblioteca do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -21,7 +20,6 @@
             </a>
         </div>
 
-        <!-- NOVO CONTAINER PARA NAV E AÇÕES DO USUÁRIO -->
         <div class="nav-actions-container">
             <nav>
                 <ul>
@@ -30,25 +28,21 @@
                     <li><a href="feedback.html">Contato</a></li>
                     <li><a href="parcerias.html">Parcerias</a></li>
                      <li id="admin-link-li" style="display: none;"><a href="admin.html">Admin</a></li>
-                    <!-- REMOVEMOS OS LINKS DE ADMIN/LOGIN DAQUI -->
                 </ul>
             </nav>
 
-            <!-- AÇÕES DO USUÁRIO QUE MUDAM DINAMICAMENTE -->
-            <!-- NOVO user-actions COM A CASINHA -->
 <div class="user-actions">
-    <!-- Ícone da Casinha (sempre visível) -->
+ 
     <a href="casinha.html" id="casinha-icon" title="Minha Casinha">
         <i class="fas fa-home"></i>
         <span id="casinha-contador" class="contador">0</span>
     </a>
     
-    <!-- Ícone do Perfil (controlado pelo JS) -->
+
     <a href="perfil.html" id="user-profile-icon" style="display: none;" title="Meu Perfil">
         <i class="fas fa-user-circle"></i>
     </a>
     
-    <!-- Botão de Login (controlado pelo JS) -->
     <a href="login.html" id="login-link-button" class="header-login-btn">Login</a>
 </div>
         </div>
@@ -69,13 +63,11 @@
                 <div class="container">
                     <h2>Todos os Nossos Anjinhos</h2>
                     <div class="animais-grid" id="animais-grid">
-                        <!-- Os cards dos animais serão inseridos aqui pelo JavaScript -->
                         <p>Carregando animais...</p> 
                     </div>
                 </div>
             </section>
 
-            <!-- AQUI ESTÁ A MÁGICA: A SEÇÃO DO FORMULÁRIO QUE SEU JS PRECISA -->
             <section class="adocao-form-section" id="adocao-form-section" style="display: none;">
                 <h2 id="adocao-form-title">Formulário de Adoção</h2>
                 <p class="section-intro-text">
@@ -83,7 +75,6 @@
                     Nosso time analisará seu perfil e entrará em contato.
                 </p>
                 <form class="adocao-form" id="adocao-form">
-    <!-- NOVO CAMPO ESCONDIDO PARA GUARDAR O ID DO ANIMAL -->
     <input type="hidden" id="animal-id-hidden-input" name="animal_id">
 
     <div class="form-group">
@@ -146,8 +137,7 @@
     <script src="js/auth-ui.js"></script>
     <script src="js/casinha-global.js"></script>
        <script>
-        // Inicializa o cliente Supabase com a URL CORRETA
-       const SUPABASE_URL = 'https://fcozxgnwoubuqiynmwwr.supabase.co'; // <--- CORRIGIDO AQUI
+       const SUPABASE_URL = 'https://fcozxgnwoubuqiynmwwr.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTkMPVq78MTdbJc-zCTqRTDsla7m7pc4sH3PFn0';
         const { createClient } = supabase;
         const supabaseGlobalClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

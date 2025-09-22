@@ -8,12 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const profileIcon = document.getElementById('user-profile-icon');
     const loginButton = document.getElementById('login-link-button');
-    const adminLinkLi = document.getElementById('admin-link-li'); // Pegamos o novo elemento
-
-    // Função para verificar se o usuário é admin
+    const adminLinkLi = document.getElementById('admin-link-li'); 
     async function checkIsAdmin(user) {
-        if (!user) return false; // Se não há usuário, não é admin
-
+        if (!user) return false; 
         try {
             const { data, error } = await supabaseClient
                 .from('usuarios')
@@ -22,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 .single();
 
             if (error) {
-                // Se der erro (ex: perfil não criado ainda), assume que não é admin
                 console.warn("Aviso: Não foi possível verificar o status de admin. ", error.message);
                 return false;
             }
@@ -35,28 +31,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Função principal para atualizar toda a UI
     async function updateUserUI(user) {
-        // Garante que os elementos básicos existem
         if (!profileIcon || !loginButton) {
             return;
         }
 
         if (user) {
-            // Usuário está logado: mostra ícone de perfil, esconde botão de login
             profileIcon.style.display = 'block';
             loginButton.style.display = 'none';
 
-            // Agora, verifica se é admin para mostrar o link
             const isAdmin = await checkIsAdmin(user);
             if (isAdmin && adminLinkLi) {
-                adminLinkLi.style.display = 'list-item'; // 'list-item' é o display correto para <li>
+                adminLinkLi.style.display = 'list-item'; 
             } else if (adminLinkLi) {
                 adminLinkLi.style.display = 'none';
             }
 
         } else {
-            // Usuário não está logado: esconde tudo
             profileIcon.style.display = 'none';
             loginButton.style.display = 'block';
             if (adminLinkLi) {

@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adopet - Adote um Amigo</title>
     <link rel="stylesheet" href="css/style.css">
-    <!-- Font Awesome para ícones (versão 6.0.0) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
@@ -23,7 +21,7 @@
             </a>
         </div>
 
-        <!-- NOVO CONTAINER PARA NAV E AÇÕES DO USUÁRIO -->
+        
         <div class="nav-actions-container">
             <nav>
                 <ul>
@@ -32,25 +30,20 @@
                     <li><a href="feedback.html">Contato</a></li>
                     <li><a href="parcerias.html">Parcerias</a></li>
                      <li id="admin-link-li" style="display: none;"><a href="admin.html">Admin</a></li>
-                    <!-- REMOVEMOS OS LINKS DE ADMIN/LOGIN DAQUI -->
+                    
                 </ul>
             </nav>
 
-            <!-- AÇÕES DO USUÁRIO QUE MUDAM DINAMICAMENTE -->
-           <!-- NOVO user-actions COM A CASINHA -->
 <div class="user-actions">
-    <!-- Ícone da Casinha (sempre visível) -->
     <a href="casinha.html" id="casinha-icon" title="Minha Casinha">
         <i class="fas fa-home"></i>
         <span id="casinha-contador" class="contador">0</span>
     </a>
     
-    <!-- Ícone do Perfil (controlado pelo JS) -->
     <a href="perfil.html" id="user-profile-icon" style="display: none;" title="Meu Perfil">
         <i class="fas fa-user-circle"></i>
     </a>
     
-    <!-- Botão de Login (controlado pelo JS) -->
     <a href="login.html" id="login-link-button" class="header-login-btn">Login</a>
 </div>
         </div>
@@ -80,7 +73,6 @@
             </div>
         </section>
 
-        <!-- NOVA SEÇÃO DE TEXTO - POR QUE ADOTAR? -->
         <section class="why-adopt-section">
             <div class="container">
                 <h2>Por Que Adotar?</h2>
@@ -96,23 +88,20 @@
                     para resgatar outros animais que precisam de ajuda urgente. Descubra a felicidade da adoção
                     e encontre o amor incondicional que só um pet pode oferecer!
                 </p>
-                <!-- Adicione mais parágrafos aqui se quiser -->
             </div>
         </section>
-        <!-- FIM DA NOVA SEÇÃO -->
 
 
-        <!-- SEÇÃO DO CAROUSEL MOVida DA PAGINA ADOCAO PARA A PAGINA INICIAL -->
         <section class="carousel-section">
              <div class="container">
-                <h2>Animais em Destaque</h2> <!-- Título ajustado para a página inicial -->
+                <h2>Animais em Destaque</h2> 
                 <p class="section-intro-text">
                     Conheça alguns dos nossos amiguinhos que estão ansiosamente esperando por um lar!
                 </p>
 
                 <div class="carousel-container">
                     <div class="carousel-track" id="carousel-track">
-                        <!-- Slides de animais definidos diretamente no HTML -->
+                       
                          <div class="carousel-slide">
                             <img src="img/animal1.jpg" alt="Antoin">
                             <h3>Antoin</h3>
@@ -242,10 +231,8 @@
         </div>
     </footer>
  <script src="js/admin-script.js" defer></script>
-   <!-- PRIMEIRO, A BIBLIOTECA SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    <!-- SEGUNDO, O NOSSO NOVO SCRIPT DE UI -->
     <script src="js/auth-ui.js"></script>
     <script src="js/script.js"></script>
     <script src="js/casinha-global.js"></script>

@@ -54,12 +54,12 @@
         </div>
     </main>
        <footer>
-        <div class="container">
+         <div class="container">
             <div class="footer-sections">
                 <div class="footer-section">
                     <h3>Sobre o Adopet Cuida</h3>
                     <ul>
-                        <li><a href="quem-somos.html">Quem Somos</a></li>
+                        <li><a href="quemsomos.html">Quem Somos</a></li> 
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -78,14 +78,16 @@
                     </ul>
                 </div>
             </div>
-            <p>© 2024 Adopet - Projeto Integrador.</p>
+            <p>© 2024 Adopet - Projeto Integrador. </p>
         </div>
     </footer>
-
+<script src="js/admin-script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="js/auth-ui.js"></script>
     <script>
-        const SUPABASE_URL = 'https://fcozxgnwoubuqiynmwwr.supabase.co'; // <--- CORRIGIDO AQUI
+        const SUPABASE_URL = 'https://fcozxgnwoubuqiynmwwr.supabase.co'; 
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTkMPVq78MTdbJc-zCTqRTDsla7m7pc4sH3PFn0';
-        // Inicializa o cliente Supabase da forma correta
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -128,7 +130,6 @@
                     });
 
                     if (error) {
-                        // Joga o erro para ser pego pelo bloco catch
                         throw error;
                     }
                     

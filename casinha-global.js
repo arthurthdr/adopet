@@ -1,5 +1,3 @@
-// js/casinha-global.js
-// Este arquivo contém apenas as funções da casinha que são usadas em MAIS DE UMA PÁGINA.
 
 function getCasinha() {
     return JSON.parse(localStorage.getItem('casinhaAdopet')) || [];
@@ -19,5 +17,4 @@ function updateCasinhaContador() {
     }
 }
 
-// Chamar o contador assim que a página carrega, para manter o número sempre atualizado.
 document.addEventListener('DOMContentLoaded', updateCasinhaContador);

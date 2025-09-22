@@ -1,7 +1,5 @@
-// js/casinha-script.js
 
 document.addEventListener('DOMContentLoaded', function() {
-    // A lógica só roda depois que a página e todos os scripts carregaram.
 
     if (document.querySelector('.casinha-section')) {
         if (typeof supabaseClient === 'undefined') {
@@ -26,10 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         function displayPetsNaCasinha() {
-            // Usa a função getCasinha() que agora está no arquivo casinha-global.js
             const casinha = getCasinha();
-            console.log("Itens na casinha:", casinha); // LOG DE DIAGNÓSTICO
-            
+            console.log("Itens na casinha:", casinha); 
             casinhaGrid.innerHTML = '';
 
             if (casinha.length === 0) {
@@ -56,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // As funções de clique precisam estar acessíveis globalmente
         window.removerDaCasinha = function(animalId) {
             let casinha = getCasinha();
             casinha = casinha.filter(animal => String(animal.id) !== animalId);

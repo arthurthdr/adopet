@@ -6,84 +6,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quem Somos - Adopet</title>
     <link rel="stylesheet" href="css/style.css">
-    <!-- Font Awesome para ícones (versão 6.0.0) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <div class="container">
-            <div class="logo">
-                <a href="index.html">
-                    <img src="img/logo.png" alt="Adopet Logo">
-                </a>
-            </div>
+    <div class="container">
+        <div class="logo">
+            <a href="index.html">
+                <img src="img/logo.png" alt="Adopet Logo">
+            </a>
+        </div>
+
+        <div class="nav-actions-container">
             <nav>
                 <ul>
-                   <li><a href="index.html">Início</a></li>
+                    <li><a href="index.html">Início</a></li>
                     <li><a href="adocao.html">Adoção</a></li>
-                    <li><a href="feedback.html">Feedback</a></li>
+                   <li><a href="feedback.html">Contato</a></li>
                     <li><a href="parcerias.html">Parcerias</a></li>
-                    <li><a href="admin.html">Admin</a></li>
-                    <li><a href="login.html">Login</a></li>
+                     <li id="admin-link-li" style="display: none;"><a href="admin.html">Admin</a></li>
                 </ul>
             </nav>
-        </div>
-    </header>
 
+<div class="user-actions">
+    <a href="casinha.html" id="casinha-icon" title="Minha Casinha">
+        <i class="fas fa-home"></i>
+        <span id="casinha-contador" class="contador">0</span>
+    </a>
+    
+    <a href="perfil.html" id="user-profile-icon" style="display: none;" title="Meu Perfil">
+        <i class="fas fa-user-circle"></i>
+    </a>
+    
+    <a href="login.html" id="login-link-button" class="header-login-btn">Login</a>
+</div>
+        </div>
+    </div>
+</header>
     <main>
         <section class="quem-somos-section">
             <div class="container">
-                <h1>Quem Somos</h1>
-                <p class="section-intro-text" style="text-align: left; max-width: none; margin-bottom: 15px;">
-                     O Adopet é um projeto dedicado a conectar animais de estimação
-                    carenciados com lares amorosos e responsáveis. Acreditamos que
-                    todo animal merece uma segunda chance e um lugar para chamar de lar.
-                    Trabalhamos em parceria com abrigos e protetores independentes
-                    para facilitar o processo de adoção e conscientizar sobre a guarda
-                    responsável de cães e gatos.
-                </p>
-                <p class="section-intro-text" style="text-align: left; max-width: none;">
-                     Nossa missão é promover o bem-estar animal e reduzir o número de
-                     animais abandonados, criando um futuro mais feliz para eles e para as famílias que os adotam.
-                </p>
-                <!-- Adicione mais parágrafos ou conteúdo aqui, se desejar -->
+               <h1>Quem somos?</h1>
+
+<p class="section-intro-text" style="text-align: left; max-width: none; margin-bottom: 15px;">
+    O Adopet é um projeto de tecnologia com um propósito fundamentalmente humano: conectar vidas. Somos <strong>Arthur, Nicole e Isabela</strong>, alunos do curso Técnico em Informática para Internet no <strong>IFPR - Campus Assis Chateaubriand</strong>, e desenvolvemos esta plataforma como nosso Projeto Integrador do segundo ano.
+</p>
+
+<p class="section-intro-text" style="text-align: left; max-width: none; margin-bottom: 15px;">
+    A nossa motivação surgiu da percepção de que a tecnologia, quando aplicada com foco social, tem o poder de resolver problemas reais. Identificamos a necessidade de otimizar e humanizar o processo de adoção de animais em nossa comunidade, criando uma solução digital que fosse ao mesmo tempo eficiente para abrigos e acolhedora para futuros tutores.
+</p>
+
+<p class="section-intro-text" style="text-align: left; max-width: none; margin-bottom: 15px;">
+    Utilizando as competências técnicas que adquirimos em desenvolvimento web, estruturamos o Adopet como uma plataforma robusta e intuitiva. Nosso objetivo é oferecer uma ferramenta centralizada que não apenas exibe animais para adoção, mas que também educa sobre a guarda responsável e facilita a comunicação entre protetores e adotantes.
+</p>
+
+<p class="section-intro-text" style="text-align: left; max-width: none; margin-bottom: 15px;">
+    Este site representa a aplicação prática de nosso aprendizado em programação, design e gestão de projetos. Acreditamos no potencial da inovação para gerar impacto positivo e esperamos que o Adopet sirva como uma ponte sólida para que mais animais encontrem um lar seguro e amoroso.
+</p>
             </div>
         </section>
     </main>
 
-    <footer>
+     <footer>
         <div class="container">
             <div class="footer-sections">
                 <div class="footer-section">
                     <h3>Sobre o Adopet Cuida</h3>
                     <ul>
-                        <li><a href="quemsomos.html">Quem Somos</a></li>
+                        <li><a href="quemsomos.html">Quem Somos</a></li> 
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Dúvidas</h3>
                     <ul>
-                        <li><a href="#">Atendimento</a></li>
+                        <li><a href="feedback.html">Atendimento</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Redes Sociais</h3>
                     <ul class="social-links">
-                        <li><a href="#"><i class="fab fa-facebook"></i></a></li>
-                        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-                        <li><a href="#"><i class="fab fa-youtube"></i></a></li>
-                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="contato.html#redes-sociais"><i class="fab fa-facebook"></i></a></li>
+                        <li><a href="contato.html#redes-sociais"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="contato.html#redes-sociais"><i class="fab fa-youtube"></i></a></li>
+                        <li><a href="contato.html#redes-sociais"><i class="fab fa-twitter"></i></a></li>
                     </ul>
                 </div>
             </div>
-            <p>© 2024 Adopet - Projeto Integrador.</p>
+            <p>© 2024 Adopet - Projeto Integrador. </p>
         </div>
     </footer>
- 
+ <script src="js/admin-script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="js/auth-ui.js"></script>
+    <script src="js/casinha-global.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>
