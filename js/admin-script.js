@@ -1,3 +1,4 @@
+
 async function inicializarAdmin(supabaseClient) {
     if (!supabaseClient) {
         console.error("Admin-script: Cliente Supabase não recebido!");
