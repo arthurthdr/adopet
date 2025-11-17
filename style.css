@@ -1,22 +1,6 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
-    line-height: 1.6;
-}
-
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+/* ============================================= */
+/* === 1. CONFIGURAÇÕES GLOBAIS E VARIÁVEIS === */
+/* ============================================= */
 :root {
     --primary-color: #20A79D; 
     --secondary-color: #FF8C00;
@@ -27,10 +11,48 @@ body {
     --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
 h1, h2, h3 {
     color: var(--text-color);
     margin-bottom: 20px;
 }
+
+main section {
+    padding: 50px 0; 
+}
+
+.section-intro-text {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+    color: var(--text-color);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ============================ */
+/* === 2. CABEÇALHO (HEADER) === */
+/* ============================ */
 header {
     background-color: var(--primary-color);
     color: white;
@@ -73,19 +95,69 @@ header nav ul li a:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-main section {
-    padding: 50px 0; 
+.nav-actions-container {
+    display: flex;
+    align-items: center;
+    gap: 30px;
 }
 
-.section-intro-text {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 1.1em;
-    color: var(--text-color);
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+.user-actions {
+    display: flex;
+    align-items: center;
 }
+
+#user-profile-icon {
+    color: white;
+    font-size: 2em;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+#user-profile-icon:hover {
+    color: var(--secondary-color);
+}
+
+.header-login-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    visibility: visible;
+    opacity: 1;
+}
+
+.header-login-btn:hover {
+    background-color: #e07b00;
+}
+
+#casinha-icon {
+    position: relative;
+    color: white;
+    font-size: 2em;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+.contador {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: var(--secondary-color);
+    color: white;
+    border-radius: 50%;
+    padding: 2px 7px;
+    font-size: 0.6em;
+    font-weight: bold;
+    border: 2px solid var(--primary-color);
+}
+
+/* ======================================= */
+/* === 3. SEÇÕES GERAIS (PÁGINA INICIAL) === */
+/* ======================================= */
 .hero {
     background-color: var(--primary-color);
     color: white;
@@ -122,6 +194,7 @@ main section {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 .adote-section {
     background-color: var(--bg-light);
     padding: 40px 0;
@@ -136,9 +209,8 @@ main section {
 
 .adote-section p {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0 auto 20px auto;
     color: var(--text-color);
-    margin-bottom: 20px; 
 }
 
 .adote-section .pegadas-img {
@@ -147,48 +219,9 @@ main section {
     opacity: 0.7;
 }
 
-.filtro-busca {
-    background-color: var(--bg-white);
-    padding: 30px 0;
-    box-shadow: 0 2px 5px var(--shadow-color);
-}
-
-.filtro-busca .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.filtro-busca select,
-.filtro-busca button {
-    padding: 12px 20px;
-    border-radius: 5px;
-    border: 1px solid var(--border-color);
-    font-size: 1em;
-    font-family: 'Montserrat', sans-serif;
-    cursor: pointer;
-}
-
-.filtro-busca select {
-    flex: 1;
-    min-width: 150px; 
-    max-width: 200px;
-}
-
-.filtro-busca button {
-    background-color: var(--secondary-color);
-    color: white;
-    border: none;
-    transition: background-color 0.3s ease;
-    font-weight: bold;
-}
-
-.filtro-busca button:hover {
-    background-color: #e07b00;
-}
-
+/* ============================================ */
+/* === 4. CARDS DE ANIMAIS E GRID DE ADOÇÃO === */
+/* ============================================ */
 .animais-disponiveis {
     background-color: var(--bg-light);
 }
@@ -226,7 +259,7 @@ main section {
 .animal-card img {
     width: 100%;
     height: 200px; 
-    object-fit: cover; /* Corta a imagem para preencher */
+    object-fit: cover;
     border-radius: 8px;
     margin-bottom: 15px;
     box-shadow: 0 1px 3px var(--shadow-color);
@@ -242,13 +275,13 @@ main section {
     margin-bottom: 8px;
     font-size: 1em;
     color: var(--text-color);
-    display: flex; /* Permite alinhar ícone e texto */
+    display: flex;
     align-items: center;
-    justify-content: center; /* Centraliza o conteúdo do parágrafo */
+    justify-content: center;
 }
 
 .animal-card p i {
-    margin-right: 8px; /* Espaço entre ícone e texto */
+    margin-right: 8px;
     color: var(--primary-color);
     font-size: 1.1em;
 }
@@ -288,25 +321,162 @@ main section {
     background-color: #1a857d;
 }
 
-.feedback-form-container {
-    background-color: var(--bg-white);
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px var(--shadow-color);
-    max-width: 700px;
-    margin: 40px auto; /* Centraliza o formulário */
+/* ============================================= */
+/* === 5. CARROSSEL (COM CORREÇÕES APLICADAS) === */
+/* ============================================= */
+.carousel-section {
+    background-color: var(--bg-light);
+    padding: 60px 0;
 }
 
-.feedback-form-container h1 {
+.carousel-section .container {
+    position: relative; /* Define o contexto para os botões */
+}
+
+.carousel-section h2 {
+    font-size: 2.5em;
     text-align: center;
-    margin-bottom: 20px;
 }
 
-.feedback-form-container form {
+.carousel-viewport {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-track {
+    display: flex;
+    scroll-behavior: smooth;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 20px 0;
+    -ms-overflow-style: none;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+.carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-slide {
+    flex: 0 0 300px;
+    margin: 0 15px;
+    background-color: var(--bg-white);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+.carousel-slide:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.carousel-slide .slide-image-container {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+.carousel-slide:hover img {
+    transform: scale(1.1);
+}
+
+.carousel-slide .slide-content {
+    padding: 20px;
+    text-align: left;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
 
+.carousel-slide .slide-content h3 {
+    font-size: 1.6em;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.carousel-slide .slide-content .pet-info {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    color: var(--text-color);
+    flex-grow: 1;
+}
+
+.carousel-slide .slide-content .pet-info li {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.carousel-slide .slide-content .pet-info i {
+    color: var(--secondary-color);
+    font-size: 1.1em;
+    width: 20px;
+    text-align: center;
+}
+
+.carousel-slide .slide-content .adopt-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+.carousel-slide .slide-content .adopt-button:hover {
+    background-color: #e07b00;
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background-color: var(--bg-white);
+    color: var(--primary-color);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.carousel-button:hover {
+    transform: translateY(-50%) scale(1.1);
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.carousel-button.prev {
+    left: -25px;
+}
+.carousel-button.next {
+    right: -25px;
+}
+
+/* =========================== */
+/* === 6. FORMULÁRIOS GERAIS === */
+/* =========================== */
 .form-group {
     margin-bottom: 20px;
 }
@@ -320,6 +490,9 @@ main section {
 
 .form-group input[type="text"],
 .form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="number"],
+.form-group select,
 .form-group textarea {
     width: 100%;
     padding: 12px;
@@ -330,200 +503,10 @@ main section {
 }
 
 .form-group textarea {
-    resize: vertical; /* Permite redimensionar apenas verticalmente */
+    resize: vertical;
 }
 
-.feedback-form-container .submit-btn {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-    align-self: center; /* Centraliza o botão */
-}
-
-.feedback-form-container .submit-btn:hover {
-    background-color: #1a857d;
-}
-
-.partners-page-section {
-     background-color: var(--bg-light);
-}
-
-.partners-page-section h1 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.partner-item {
-    background-color: var(--bg-white);
-    padding: 30px;
-    margin-bottom: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px var(--shadow-color);
-    display: flex; /* Usa flexbox para logo e texto */
-    align-items: center;
-    gap: 30px; /* Espaço entre logo e texto */
-    flex-wrap: wrap; /* Permite quebrar linha */
-}
-
-.partner-logo-display {
-    flex-shrink: 0; /* Não diminui a largura */
-    width: 120px; /* Tamanho fixo para o logo */
-    height: 120px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Garante que a imagem não saia */
-}
-
-.partner-logo-display img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* Garante que a imagem inteira seja visível */
-}
-
-
-.partner-item h3 {
-    color: var(--primary-color);
-    margin-bottom: 10px;
-    font-size: 1.5em;
-}
-
-.partner-item p {
-    flex-grow: 1; /* Permite que o texto ocupe o espaço restante */
-    color: var(--text-color);
-}
-
-
-.carousel-section h1, /* Ajuste para aplicar ao h1 da seção carousel */
-.carousel-section h2 { /* Adicionado h2 para a página inicial */
-    text-align: center;
-}
-
-.carousel-container {
-    position: relative;
-    overflow: hidden;
-    margin: 40px auto;
-    max-width: 900px; /* Largura máxima do container do carousel */
-}
-
-.carousel-track {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-}
-
-.carousel-slide {
-    min-width: 300px; /* Largura de cada slide. Ajuste conforme desejar. */
-    flex: 0 0 auto; /* Não cresce nem diminui, base na min-width */
-    margin: 0 15px; /* Espaçamento entre slides */
-    background-color: var(--bg-white);
-    border-radius: 8px;
-    box-shadow: 0 2px 4px var(--shadow-color);
-    padding: 20px;
-    text-align: center;
-    transition: transform 0.3s ease;
-}
-
-.carousel-slide img {
-    width: 100%;
-    height: 200px; /* Altura fixa para imagens no carousel */
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    box-shadow: 0 1px 3px var(--shadow-color);
-}
-
-.carousel-slide h3 {
-    color: var(--secondary-color);
-    margin-bottom: 10px;
-    font-size: 1.3em;
-}
-
-.carousel-slide p {
-     margin-bottom: 8px;
-    font-size: 1em;
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.carousel-slide p i {
-    margin-right: 8px;
-    color: var(--primary-color);
-    font-size: 1.1em;
-}
-
-.carousel-slide .adopt-button {
-    background-color: var(--secondary-color);
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 15px;
-    font-weight: bold;
-    box-shadow: 0 1px 3px var(--shadow-color);
-    transition: background-color 0.3s ease;
-    font-size: 1em;
-}
-.carousel-slide .adopt-button:hover {
-     background-color: #e07b00;
-}
-
-
-.carousel-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    z-index: 10; /* Garante que os botões fiquem sobre os slides */
-    border-radius: 50%; /* Botões redondos */
-    font-size: 1.5em;
-    transition: background-color 0.3s ease;
-    line-height: 1; /* Ajusta alinhamento vertical do texto/ícone */
-}
-
-.carousel-button.prev {
-    left: 10px;
-}
-
-.carousel-button.next {
-    right: 10px;
-}
-
-.carousel-button:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-
-.quem-somos-section {
-     padding: 50px 0; /* Mesmo padding das outras seções principais */
-     background-color: var(--bg-light); /* Ou use --bg-white se preferir */
-}
-
-.quem-somos-section h1 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.quem-somos-section p {
-    max-width: 800px; /* Mantém a largura máxima para parágrafos longos */
-    margin: 0 auto 15px auto; /* Centraliza o parágrafo e adiciona espaço abaixo */
-    color: var(--text-color);
-    text-align: left; /* Alinha o texto à esquerda */
-}
-
+/* Formulário de Adoção */
 .adocao-form-section {
     background-color: var(--bg-white);
     padding: 40px;
@@ -537,31 +520,10 @@ main section {
     margin-bottom: 30px;
 }
 
-.adocao-form .form-group {
-    margin-bottom: 20px;
-}
-
-.adocao-form label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: var(--text-color);
-}
-
-.adocao-form input[type="text"],
-.adocao-form input[type="email"],
-.adocao-form input[type="tel"],
-.adocao-form textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    font-size: 1em;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.adocao-form textarea {
-    resize: vertical;
+.adocao-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
 }
 
 .adocao-form button {
@@ -573,55 +535,192 @@ main section {
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
-/* Adicionado display flex para alinhar os botões e gap */
-.adocao-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; 
-}
-
-@media (min-width: 600px) {
-    .adocao-form .form-buttons { 
-        display: flex;
-        justify-content: center; 
-        gap: 20px; 
-        margin-top: 20px;
-    }
-    .adocao-form button {
-        width: auto; /* Largura automática para se ajustar ao conteúdo/padding */
-        max-width: none; /* Remove limite máximo quando lado a lado */
-        margin: 0; /* Remove margens individuais se usar flexbox gap */
-    }
-}
-
 
 .adocao-form button[type="submit"] {
     background-color: var(--primary-color);
     color: white;
-    /* align-self: center; Removido para flexbox */
-    max-width: 200px; /* Limita a largura do botão */
-    width: 100%; /* Garante que ocupe a largura em mobile */
+    max-width: 200px;
+    width: 100%;
 }
-
 .adocao-form button[type="submit"]:hover {
     background-color: #1a857d;
 }
 
-/* Estilo específico para o botão de cancelar */
 .adocao-form .cancel-button {
     background-color: #ccc;
     color: #333;
-    /* margin-left: 10px; Removido para flexbox */
-    /* align-self: center; Removido para flexbox */
-    max-width: 200px; /* Limita a largura do botão */
-    width: 100%; /* Garante que ocupe a largura em mobile */
+    max-width: 200px;
+    width: 100%;
 }
-
 .adocao-form .cancel-button:hover {
     background-color: #bbb;
 }
 
-/* Footer */
+/* ============================= */
+/* === 7. PÁGINAS ESPECÍFICAS === */
+/* ============================= */
+
+/* Página Quem Somos */
+.quem-somos-section {
+     padding: 50px 0;
+     background-color: var(--bg-light);
+}
+.quem-somos-section h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.quem-somos-section p {
+    max-width: 800px;
+    margin: 0 auto 15px auto;
+    color: var(--text-color);
+    text-align: left;
+}
+
+/* Página Parcerias */
+.partners-page-section {
+     background-color: var(--bg-light);
+}
+.partners-page-section h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.partner-item {
+    background-color: var(--bg-white);
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+.partner-logo-display {
+    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.partner-logo-display img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+.partner-item h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+.partner-item p {
+    flex-grow: 1;
+    color: var(--text-color);
+}
+
+/* ================================== */
+/* === 8. COMPONENTES REUTILIZÁVEIS === */
+/* ================================== */
+
+/* Botão Padrão */
+.page-link-button {
+    display: inline-block;
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+.page-link-button:hover {
+    background-color: #e07b00;
+    transform: translateY(-2px);
+}
+
+/* Modal de Confirmação */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-content {
+    background-color: var(--bg-white);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+}
+.modal-content h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 1.5em;
+}
+.modal-content p {
+    margin-bottom: 25px;
+    font-size: 1.1em;
+    color: var(--text-color);
+}
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+.modal-actions button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.modal-actions button:hover {
+    transform: translateY(-2px);
+}
+.modal-btn-confirm {
+    background-color: var(--primary-color);
+    color: white;
+}
+.modal-btn-confirm:hover {
+    background-color: #1a857d;
+}
+.modal-btn-cancel {
+    background-color: #ccc;
+    color: #333;
+}
+.modal-btn-cancel:hover {
+    background-color: #bbb;
+}
+
+/* ======================= */
+/* === 9. RODAPÉ (FOOTER) === */
+/* ======================= */
 footer {
     background-color: var(--primary-color);
     color: white;
@@ -636,40 +735,40 @@ footer .footer-sections {
     display: flex;
     justify-content: space-around;
     margin-bottom: 30px;
-    flex-wrap: wrap; /* Permite quebrar linha */
-    gap: 20px; /* Espaço entre as colunas em telas menores */
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 footer .footer-section {
-    flex: 1; /* Ocupa espaço igual */
-    min-width: 150px; /* Largura mínima para cada seção */
-    text-align: left; /* Alinha texto à esquerda nas colunas */
+    flex: 1;
+    min-width: 150px;
+    text-align: left;
 }
 footer .footer-section:last-child {
-    text-align: center; /* Centraliza redes sociais */
+    text-align: center;
 }
-
 
 footer .footer-section h3 {
     font-size: 1.2em;
     margin-bottom: 15px;
-    color: white; /* Títulos do footer devem ser brancos */
+    color: white;
 }
 
 footer .footer-section ul {
     list-style: none;
+    padding: 0;
 }
 
 footer .footer-section ul li a {
     text-decoration: none;
-    color: rgba(255, 255, 255, 0.8); /* Cor do link um pouco transparente */
+    color: rgba(255, 255, 255, 0.8);
     display: block;
     padding: 5px 0;
     transition: color 0.3s ease;
 }
 
 footer .footer-section ul li a:hover {
-    color: var(--secondary-color); /* Muda para a cor secundária no hover */
+    color: var(--secondary-color);
 }
 
 footer .social-links {
@@ -682,7 +781,7 @@ footer .social-links li {
 }
 
 footer .social-links a {
-    font-size: 1.8em; /* Aumenta tamanho dos ícones sociais */
+    font-size: 1.8em;
     color: white;
     transition: color 0.3s ease;
 }
@@ -694,323 +793,293 @@ footer .social-links a:hover {
 footer p {
     margin-top: 20px;
     font-size: 0.9em;
-    color: rgba(255, 255, 255, 0.7); /* Texto copyright um pouco transparente */
+    color: rgba(255, 255, 255, 0.7);
 }
 
+/* ============================== */
+/* === 10. PAINEL DE CONTROLE ADMIN === */
+/* ============================== */
+.admin-dashboard {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+}
 
-/* Botão padrão (usado em vários lugares) */
-.page-link-button {
-    display: inline-block;
-    background-color: var(--secondary-color);
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+.admin-header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+#logout-button {
+    background-color: #d9534f;
     color: white;
-    padding: 12px 25px;
-    text-decoration: none;
-    border-radius: 25px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
     font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 2px 4px var(--shadow-color);
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+#logout-button:hover {
+    background-color: #c9302c;
 }
 
-.page-link-button:hover {
-    background-color: #e07b00;
-    transform: translateY(-2px); /* Efeito sutil no hover */
+.admin-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 25px;
+}
+.tab-link {
+    padding: 12px 25px;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--text-color);
+    position: relative;
+    bottom: -2px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+.tab-link:hover {
+    color: var(--primary-color);
+}
+.tab-link.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
 }
 
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}
 
-/* Responsividade */
+#manage-animals-content .grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+    align-items: start;
+}
+
+.form-admin-container {
+    background-color: var(--bg-white);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    position: sticky;
+    top: 20px;
+}
+
+.animais-lista-container {
+    background-color: var(--bg-white);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.form-admin-container h3, .animais-lista-container h3, #adoption-requests-content h3, #contact-messages-content h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: var(--primary-color);
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.animais-lista table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.animais-lista th, .animais-lista td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+.animais-lista th {
+    font-weight: bold;
+    background-color: #f9f9f9;
+}
+.animais-lista tr:hover {
+    background-color: #f5f5f5;
+}
+
+.btn-edit { background-color: #f0ad4e; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+.btn-delete { background-color: #d9534f; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+
+/* Cards de Pedido de Adoção e Mensagens */
+.pedido-card, .mensagem-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.pedido-card h4, .mensagem-card h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+.pedido-card.status-pendente { border-left: 5px solid #007bff; }
+.pedido-card.status-aprovado { border-left: 5px solid #28a745; }
+.pedido-card.status-rejeitado { border-left: 5px solid #dc3545; }
+
+.pedido-card .status-text {
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 0.9em;
+}
+.status-pendente .status-text { background-color: #007bff; }
+.status-aprovado .status-text { background-color: #28a745; }
+.status-rejeitado .status-text { background-color: #dc3545; }
+
+.mensagem-card.nao-lida {
+    background-color: #f8f9fa;
+    border-left: 5px solid var(--secondary-color);
+    font-weight: bold;
+}
+.mensagem-card .msg-meta { font-size: 0.9em; color: #777; margin-bottom: 10px; }
+.mensagem-card .msg-body { background-color: #f9f9f9; padding: 15px; border-radius: 4px; white-space: pre-wrap; }
+.mensagem-card .actions button, .pedido-card .actions button { margin-top: 15px; margin-right: 10px; }
+
+.btn-approve { background-color: #5cb85c; color: white; }
+.btn-reject { background-color: #d9534f; color: white; }
+
+/* =================== */
+/* === 11. RESPONSIVIDADE === */
+/* =================== */
+@media (max-width: 992px) {
+    #manage-animals-content .grid-layout { grid-template-columns: 1fr; }
+    .form-admin-container { position: static; margin-bottom: 30px; }
+}
+
 @media (max-width: 768px) {
     header .container {
         flex-direction: column;
         text-align: center;
     }
-
     header .logo img {
-         height: 70px; /* Reduz tamanho do logo em mobile */
+         height: 70px;
     }
-
     header nav ul {
         margin-top: 15px;
         flex-direction: column;
         align-items: center;
     }
-
     header nav ul li {
         margin: 5px 0;
     }
-     header nav ul li a {
-         padding: 5px 10px; /* Reduz padding do link */
-     }
-
-
-    .hero .container {
-        flex-direction: column;
-        text-align: center;
+    header nav ul li a {
+         padding: 5px 10px;
     }
-
-    .hero-text h2 {
-        font-size: 2em; /* Reduz tamanho do título hero */
-    }
-
-    .hero-image img {
-        max-width: 100%;
-    }
-
-    .filtro-busca .container {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .filtro-busca select,
-    .filtro-busca button {
-        width: 100%; /* Botões e selects ocupam largura total */
-        max-width: none; /* Remove limite máximo */
-    }
-
-    .animais-grid {
-         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Ajusta minmax para telas menores */
-         gap: 20px;
-    }
-
-    .animal-card {
-        max-width: none; /* Remove limite máximo para mobile */
-    }
-
-    .footer-sections {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .footer-section {
-        margin-bottom: 30px;
-        text-align: center; /* Centraliza texto das colunas */
-        min-width: auto;
-    }
-     footer .footer-section:last-child {
-         text-align: center; /* Garante centralização das redes */
-     }
-
-     .carousel-container {
-         margin: 20px auto;
-         max-width: 95%; /* Usa mais largura em mobile */
-     }
-
-     .carousel-slide {
-         min-width: 80%; /* Mostra menos slides por vez */
-         margin: 0 10px; /* Ajusta espaçamento */
-     }
-
-    .carousel-button {
-        padding: 8px 12px; /* Reduz padding dos botões do carousel */
-        font-size: 1.2em;
-    }
-
-    .adocao-form-section {
-        padding: 20px;
-    }
-    .adocao-form button {
-        width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-        margin-top: 10px; /* Adicionado margin-top em mobile para espaçamento */
-    }
-    .adocao-form .form-buttons {
-         flex-direction: column;
-         gap: 10px;
-         align-items: center; /* Centraliza os botões empilhados */
-         margin-top: 15px; /* Espaço acima do grupo */
-    }
-
-}
-
-
-.nav-actions-container {
-    display: flex;
-    align-items: center;
-    gap: 30px; /* Espaçamento entre o menu e o ícone/botão */
-}
-
-.user-actions {
-    display: flex;
-    align-items: center;
-}
-
-#user-profile-icon {
-    color: white;
-    font-size: 2em; /* Tamanho do ícone (ajuste se necessário) */
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-#user-profile-icon:hover {
-    color: var(--secondary-color); /* Laranja no hover */
-}
-
-.header-login-btn {
-    background-color: var(--secondary-color);
-    color: white;
-    padding: 8px 18px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-.header-login-btn:hover {
-    background-color: #e07b00; /* Laranja mais escuro no hover */
-}
-
-@media (max-width: 768px) {
     .nav-actions-container {
         flex-direction: column;
         gap: 15px;
         width: 100%;
         margin-top: 10px;
     }
-}
 
-.header-login-btn {
-    display: inline-block; /* Usar inline-block é melhor para botões com padding */
-    visibility: visible;
-    opacity: 1;
-}
+    .hero .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    .hero-text h2 {
+        font-size: 2em;
+    }
+    .hero-image img {
+        max-width: 100%;
+    }
 
+    .animais-grid {
+         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+         gap: 20px;
+    }
+    .animal-card {
+        max-width: none;
+    }
 
-#casinha-icon {
-    position: relative;
-    color: white;
-    font-size: 2em;
-    text-decoration: none;
-    margin-right: 20px; /* Espaço entre a casinha e o ícone de perfil */
-}
+    .footer-sections {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-section {
+        margin-bottom: 30px;
+        text-align: center;
+        min-width: auto;
+    }
 
-.contador {
-    position: absolute;
-    top: -5px;
-    right: -10px;
-    background-color: var(--secondary-color);
-    color: white;
-    border-radius: 50%;
-    padding: 2px 7px;
-    font-size: 0.6em;
-    font-weight: bold;
-    border: 2px solid var(--primary-color);
-}
+    .carousel-slide {
+        flex: 0 0 250px;
+    }
+    .carousel-button.prev {
+        left: 10px;
+    }
+    .carousel-button.next {
+        right: 10px;
+    }
+    .carousel-track {
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
 
-/* ===== ESTILOS DO MODAL DE CONFIRMAÇÃO ===== */
+    .adocao-form-section {
+        padding: 20px;
+    }
+    .adocao-form .form-buttons {
+         flex-direction: column;
+         gap: 10px;
+         align-items: center;
+         margin-top: 15px;
+    }
+    .adocao-form button {
+        width: 100%;
+        margin: 0;
+    }
+    @media (min-width: 600px) {
+        .adocao-form .form-buttons { 
+            flex-direction: row;
+            justify-content: center; 
+            gap: 20px; 
+            margin-top: 20px;
+        }
+        .adocao-form button {
+            width: auto;
+            max-width: none;
+        }
+    }
 
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    /* Garante que o display seja flex por padrão */
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    /* O estado escondido é controlado por opacity e visibility */
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-.modal-overlay.show {
-    opacity: 1;
-    visibility: visible;
-}
-
-.modal-content {
-    background-color: var(--bg-white);
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
-    transform: scale(0.9);
-    transition: transform 0.3s ease;
-}
-
-.modal-overlay.show {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: flex !important; /* Adicionado para garantir */
-}
-
-.modal-content h3 {
-    margin-top: 0;
-    color: var(--primary-color);
-    font-size: 1.5em;
-}
-
-.modal-content p {
-    margin-bottom: 25px;
-    font-size: 1.1em;
-    color: var(--text-color);
-}
-
-.modal-actions {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.modal-actions button {
-    padding: 12px 25px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.modal-actions button:hover {
-    transform: translateY(-2px);
-}
-
-.modal-btn-confirm {
-    background-color: #d9534f; /* Vermelho para ações destrutivas */
-    color: white;
-}
-.modal-btn-confirm:hover {
-    background-color: #c9302c;
-}
-
-.modal-btn-cancel {
-    background-color: #ccc;
-    color: #333;
-}
-.modal-btn-cancel:hover {
-    background-color: #bbb;
-}
-
-.pedido-card {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-.pedido-card h4 {
-    margin-top: 0;
-    color: var(--primary-color);
-}
-.pedido-card .actions button {
-    margin-right: 10px;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-}
-.btn-approve {
-    background-color: #5cb85c; 
-    color: white;
-}
-.btn-reject {
-    background-color: #d9534f; 
-    color: white;
+    /* Admin Responsivo */
+    .admin-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+        text-align: center;
+    }
+    .admin-tabs {
+        flex-direction: column;
+        align-items: stretch;
+        border-bottom: none;
+    }
+    .tab-link {
+        text-align: center;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .tab-link.active {
+        border-bottom-color: var(--primary-color);
+    }
 }

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Perfil - Adopet</title>
     <link rel="stylesheet" href="css/style.css">
+    <!-- 1. Carrega a biblioteca principal do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         .profile-container { max-width: 700px; margin: 40px auto; padding: 30px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
@@ -18,6 +19,7 @@
 </head>
 <body>
    <header>
+    <!-- SEU HEADER AQUI (sem alterações) -->
     <div class="container">
         <div class="logo">
             <a href="index.html">
@@ -36,18 +38,18 @@
                 </ul>
             </nav>
 
-<div class="user-actions">
-    <a href="casinha.html" id="casinha-icon" title="Minha Casinha">
-        <i class="fas fa-home"></i>
-        <span id="casinha-contador" class="contador">0</span>
-    </a>
-    
-    <a href="perfil.html" id="user-profile-icon" style="display: none;" title="Meu Perfil">
-        <i class="fas fa-user-circle"></i>
-    </a>
-    
-    <a href="login.html" id="login-link-button" class="header-login-btn">Login</a>
-</div>
+            <div class="user-actions">
+                <a href="casinha.html" id="casinha-icon" title="Minha Casinha">
+                    <i class="fas fa-home"></i>
+                    <span id="casinha-contador" class="contador">0</span>
+                </a>
+                
+                <a href="perfil.html" id="user-profile-icon" style="display: none;" title="Meu Perfil">
+                    <i class="fas fa-user-circle"></i>
+                </a>
+                
+                <a href="login.html" id="login-link-button" class="header-login-btn">Login</a>
+            </div>
         </div>
     </div>
 </header>
@@ -55,7 +57,7 @@
         <div id="profile-page-content" class="container" style="display: none;">
             <div class="profile-container">
                 <h1>Meu Perfil</h1>
-                <div id="loading-message">Carregando perfil...</div>
+                <div id="loading-message" style="text-align: center; padding: 20px;">Carregando perfil...</div>
 
                 <form id="profile-form" style="display: none;">
                     <div class="profile-header">
@@ -95,7 +97,8 @@
         </div>
     </main>
 
-        <footer>
+    <footer>
+        <!-- SEU FOOTER AQUI (sem alterações) -->
         <div class="container">
             <div class="footer-sections">
                 <div class="footer-section">
@@ -123,10 +126,12 @@
             <p>© 2024 Adopet - Projeto Integrador. </p>
         </div>
     </footer>
-   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-client.js"></script> <!-- << PRIMEIRO -->
+    
+    <!-- 2. Scripts Globais: auth-ui agora inicializa o Supabase -->
     <script src="js/auth-ui.js"></script>
     <script src="js/casinha-global.js"></script>
-    <script src="js/script.js"></script>
+    
+    <!-- 3. Script Específico da Página: executa a lógica do perfil -->
+    <script src="js/perfil-script.js"></script>
 </body>
 </html>

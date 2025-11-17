@@ -176,9 +176,50 @@
             <p>© 2024 Adopet - Projeto Integrador. </p>
         </div>
     </footer>
-   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-client.js"></script> <!-- << PRIMEIRO -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/auth-ui.js"></script>
     <script src="js/casinha-global.js"></script>
-    <script src="js/script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof supabaseClient === 'undefined') {
+                console.error("Supabase client não encontrado. auth-ui.js deve ser carregado primeiro.");
+                alert('Erro de configuração. Não foi possível conectar ao servidor.');
+                return;
+            }
+
+            const contactForm = document.getElementById('contact-form');
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                submitButton.disabled = true;
+                submitButton.textContent = 'Enviando...';
+
+                const dadosMensagem = {
+                    nome: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    assunto: document.getElementById('subject').value,
+                    mensagem: document.getElementById('message').value
+                };
+
+                try {
+                    const { error } = await supabaseClient
+                        .from('mensagens_contato')
+                        .insert([dadosMensagem]);
+
+                    if (error) throw error;
+
+                    alert('Mensagem enviada com sucesso! Agradecemos o seu contato.');
+                    contactForm.reset();
+                } catch (error) {
+                    alert('Ocorreu um erro ao enviar sua mensagem: ' + error.message);
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Enviar Mensagem';
+                }
+            });
+        });
+    </script>
+</body>
 </html>

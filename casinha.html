@@ -49,42 +49,39 @@
         </div>
     </div>
 </header>
-    <main>
-        <div class="container">
-            <section class="casinha-section" style="padding: 40px 0;">
-                <h1><i class="fas fa-home"></i> Minha Casinha</h1>
-                        <p class="section-intro-text">
-                             Este é o seu espaço para salvar os perfis dos pets que mais tocaram seu coração. Pense na casinha como uma área de "favoritos". Aqui, você pode revisar suas escolhas com calma antes de iniciar o processo de adoção.
-                        </p>
+   <!-- Dentro de casinha.html -->
+<main>
+    <div class="container">
+        <section class="casinha-section" style="padding: 40px 0;">
+            <h1><i class="fas fa-home"></i> Minha Casinha</h1>
+            <p class="section-intro-text">
+                 Este é o seu espaço para salvar os perfis dos pets que mais tocaram seu coração. Pense na casinha como uma área de "favoritos". Aqui, você pode revisar suas escolhas com calma antes de iniciar o processo de adoção.
+            </p>
 
-                <div id="casinha-content" style="display: none;">
+            <!-- 1. MENSAGEM PARA USUÁRIOS NÃO LOGADOS -->
+            <div id="login-prompt-casinha" style="display: none; text-align: center; padding: 30px; background-color: #fff3cd; border-radius: 8px;">
+                <h2>Quase lá!</h2>
+                <p>Você precisa fazer login para ver os pets que você salvou e iniciar o processo de adoção.</p>
+                <a href="login.html" class="page-link-button">Fazer Login ou Cadastrar</a>
+            </div>
 
-                    <div id="casinha-grid" class="animais-grid"></div>
-                </div>
-                
-                <div id="login-prompt-casinha" style="display: none; text-align: center; padding: 30px; background-color: #fff3cd; border-radius: 8px;">
-                    <h2>Quase lá!</h2>
-                    <p>Você precisa fazer login para ver os pets que você salvou e iniciar o processo de adoção.</p>
-                    <a href="login.html" class="page-link-button">Fazer Login ou Cadastrar</a>
-                </div>
+            <!-- 2. CONTAINER PRINCIPAL PARA O CONTEÚDO DA CASINHA (QUANDO LOGADO) -->
+            <div id="casinha-content" style="display: none;">
+                <!-- O grid onde os cards dos animais serão inseridos pelo JS -->
+                <div id="casinha-grid" class="animais-grid"></div>
+            </div>
 
-
-                <div id="casinha-content" style="display: none;">
-                    <p class="section-intro-text">Estes são os amiguinhos que você selecionou. Que tal dar o próximo passo?</p>
-                    <div id="casinha-grid" class="animais-grid">
-                    </div>
-                </div>
-                <div id="casinha-vazia-msg" style="display: none; text-align: center; padding: 40px; background-color: #f8f9fa; border-radius: 8px;">
-                        <h2 style="margin-bottom: 20px;">
-                            <strong>Casinha Vazia?</strong> 
-                            <a href="adocao.html" style="text-decoration: none; color: var(--secondary-color);">Adicione alguns animais!</a>
-                        </h2>
-                        <p>Clique em "Adicionar à Casinha" nos perfis dos pets para salvá-los aqui.</p>
-                    </div>
-            </section>
-        </div>
-    </main>
-
+            <!-- 3. MENSAGEM PARA QUANDO A CASINHA ESTIVER VAZIA -->
+            <div id="casinha-vazia-msg" style="display: none; text-align: center; padding: 40px; background-color: #f8f9fa; border-radius: 8px;">
+                <h2 style="margin-bottom: 20px;">
+                    <strong>Sua casinha está vazia!</strong>
+                </h2>
+                <p>Navegue pela nossa página de adoção e clique em "Adicionar à Casinha" nos perfis dos pets para salvá-los aqui.</p>
+                <a href="adocao.html" class="page-link-button" style="margin-top: 20px;">Ver Animais para Adoção</a>
+            </div>
+        </section>
+    </div>
+</main>
     <footer>
         <div class="container">
             <div class="footer-sections">
@@ -113,10 +110,9 @@
             <p>© 2024 Adopet - Projeto Integrador. </p>
         </div>
     </footer>
-   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-client.js"></script> <!-- << PRIMEIRO -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/auth-ui.js"></script>
     <script src="js/casinha-global.js"></script>
-    <script src="js/script.js"></script>
+    <script src="js/casinha-script.js"></script>
 </body>
 </html>
