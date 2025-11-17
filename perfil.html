@@ -54,49 +54,63 @@
     </div>
 </header>
     <main>
-        <div id="profile-page-content" class="container" style="display: none;">
-            <div class="profile-container">
-                <h1>Meu Perfil</h1>
-                <div id="loading-message" style="text-align: center; padding: 20px;">Carregando perfil...</div>
+    <div id="login-prompt" class="container" style="text-align: center; padding: 50px; display: none;">
+        <h2>Você precisa estar logado para ver seu perfil.</h2>
+        <a href="login.html" class="page-link-button">Fazer Login</a>
+    </div>
 
-                <form id="profile-form" style="display: none;">
-                    <div class="profile-header">
-                        <img id="avatar-img" src="img/avatar_placeholder.png" alt="Avatar do usuário" class="profile-avatar">
-                        <div>
-                            <label for="username">Nome de Usuário</label>
-                            <input type="text" id="username" required>
-                            <small>Este será seu nome público.</small>
-                        </div>
-                    </div>
-                    
+    <div id="profile-page-content" class="profile-page-container" style="display: none;">
+        <div id="loading-message" style="text-align: center; padding: 30px;">Carregando perfil...</div>
+
+        <!-- O novo cartão de perfil -->
+        <div id="profile-card-view" class="profile-card" style="display: none;">
+            
+            <!-- Barra Lateral com Avatar e Infos Fixas -->
+            <div class="profile-sidebar">
+                <img id="avatar-img" src="img/avatar_placeholder.png" alt="Avatar do usuário" class="profile-avatar">
+                <h3 id="username-display" class="profile-username">Nome de Usuário</h3>
+                <p id="email-display" class="profile-email">email@exemplo.com</p>
+            </div>
+
+            <!-- Conteúdo Principal com Bio e Edição -->
+            <div id="profile-main-content" class="profile-main">
+                <h2>Minhas Informações</h2>
+
+                <!-- Div para mostrar os dados -->
+                <div class="profile-data-display">
+                    <h4>Sobre Mim</h4>
+                    <p id="bio-display" class="bio-display">Sua biografia aparecerá aqui.</p>
+                </div>
+                
+                <!-- Formulário de Edição (escondido por padrão) -->
+                <form id="profile-form">
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" disabled>
-                        <small>O email não pode ser alterado aqui.</small>
+                        <label for="username-input">Nome de Usuário</label>
+                        <input type="text" id="username-input" required>
                     </div>
-
                     <div class="form-group">
-                        <label for="bio">Sua Biografia</label>
-                        <textarea id="bio" rows="4" placeholder="Conte um pouco sobre você..."></textarea>
+                        <label for="bio-input">Sua Biografia</label>
+                        <textarea id="bio-input" rows="4"></textarea>
                     </div>
-
                     <div class="form-group">
-                        <label for="avatar_url">URL da Foto de Perfil</label>
-                        <input type="text" id="avatar_url" placeholder="https://exemplo.com/sua-foto.jpg">
+                        <label for="avatar_url-input">URL da Foto de Perfil</label>
+                        <input type="text" id="avatar_url-input">
                     </div>
-
-                    <button type="submit">Atualizar Perfil</button>
-                    <button type="button" id="logout-button" style="background-color: #ccc; margin-left: 10px;">Sair</button>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        <button type="button" id="cancel-edit-btn" class="btn btn-secondary">Cancelar</button>
+                    </div>
                 </form>
+
+                <!-- Botões de Ação Principais -->
+                <div class="profile-actions" id="main-profile-actions">
+                    <button id="edit-profile-btn" class="btn btn-primary">Editar Perfil</button>
+                    <button id="logout-button" class="btn btn-secondary">Sair</button>
+                </div>
             </div>
         </div>
-
-         <div id="login-prompt" class="container" style="text-align: center; padding: 50px; display: none;">
-            <h2>Você precisa estar logado para ver seu perfil.</h2>
-            <a href="login.html" class="page-link-button">Fazer Login</a>
-        </div>
-    </main>
-
+    </div>
+</main>
     <footer>
         <!-- SEU FOOTER AQUI (sem alterações) -->
         <div class="container">
