@@ -1210,3 +1210,90 @@ footer p {
         flex: 0 0 auto;
     }
 }
+
+
+
+/* FORÇAR O COMPORTAMENTO DA PÁGINA DE ADOÇÃO */
+#adocao-form-section {
+    display: none !important; /* Começa escondido obrigatoriamente */
+}
+
+#animais-disponiveis {
+    display: block; /* Lista começa visível */
+}
+
+/* --- CORREÇÃO FINAL DE VISUALIZAÇÃO --- */
+
+/* Por padrão, a seção do formulário DEVE ficar oculta */
+#adocao-form-section {
+    display: none !important;
+}
+
+/* Por padrão, a lista de animais DEVE aparecer */
+#animais-disponiveis {
+    display: block !important;
+}
+
+/* Classes utilitárias que o JavaScript vai usar para trocar */
+.mostrar-formulario {
+    display: block !important;
+}
+
+.esconder-lista {
+    display: none !important;
+}
+
+/* --- CORREÇÃO FINAL: BOTÕES DA CASINHA --- */
+.casinha-actions {
+    display: flex;
+    flex-direction: column; /* Um embaixo do outro */
+    gap: 10px; /* Espaço entre eles */
+    margin-top: 15px;
+}
+
+.btn-adopt-final {
+    width: 100%;
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.btn-remove-casinha {
+    width: 100%;
+    background-color: #d9534f; /* Vermelho */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.btn-remove-casinha:hover {
+    background-color: #c9302c;
+}
+
+/* --- CORREÇÃO DE VISUALIZAÇÃO --- */
+/* Garante que o formulário comece invisível */
+#adocao-form-section {
+    display: none !important;
+}
+
+/* Garante que a lista comece visível */
+#animais-disponiveis {
+    display: block !important;
+}
+
+/* Classes para o JavaScript controlar a troca */
+.mostrar-secao {
+    display: block !important;
+}
+.esconder-secao {
+    display: none !important;
+}

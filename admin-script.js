@@ -1,8 +1,10 @@
-// js/admin-script.js - VERSÃO FINAL E COMPLETA
+// js/admin-script.js - VERSÃO FINAL COM NOTIFICAÇÕES
 
 document.addEventListener('DOMContentLoaded', async () => {
-    if (typeof supabaseClient === 'undefined') {
-        return console.error("Supabase client não encontrado. auth-ui.js precisa ser carregado antes.");
+    // 1. Verificações Iniciais
+    if (!window.supabaseClient) {
+        console.error("Supabase client não encontrado. auth-ui.js precisa ser carregado antes.");
+        return;
     }
     if (!document.getElementById('admin-content')) return;
 
@@ -10,30 +12,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     const accessDeniedMessage = document.getElementById('admin-access-denied');
     const logoutButton = document.getElementById('logout-button');
 
+    // 2. Verificação de Segurança (Admin)
     try {
-        const { data: { session } } = await supabaseClient.auth.getSession();
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
         if (!session || !session.user) throw new Error('Usuário não logado.');
 
-        const { data: userData, error } = await supabaseClient.from('usuarios').select('is_admin').eq('id', session.user.id).single();
-        if (error || !userData || !userData.is_admin) throw new Error('Acesso negado. Você não é um administrador.');
+        // Verifica na tabela usuarios se é admin
+        const { data: userData, error } = await window.supabaseClient
+            .from('usuarios')
+            .select('is_admin')
+            .eq('id', session.user.id)
+            .single();
+
+        if (error || !userData || !userData.is_admin) throw new Error('Acesso negado.');
 
         adminContent.style.display = 'block';
         accessDeniedMessage.style.display = 'none';
-        inicializarPainelAdmin();
+        inicializarPainelAdmin(); // Inicia a lógica
+
     } catch (err) {
         adminContent.style.display = 'none';
         accessDeniedMessage.style.display = 'block';
-        accessDeniedMessage.textContent = err.message;
+        console.error(err);
     }
     
-    logoutButton.addEventListener('click', async () => {
-        await supabaseClient.auth.signOut();
-        window.location.href = 'index.html';
-    });
+    // Logout do Admin
+    if(logoutButton) {
+        logoutButton.addEventListener('click', async () => {
+            await window.supabaseClient.auth.signOut();
+            window.location.href = 'index.html';
+        });
+    }
 });
 
 function inicializarPainelAdmin() {
-    // --- LÓGICA DE NAVEGAÇÃO POR ABAS ---
+    // --- NAVEGAÇÃO POR ABAS ---
     const tabLinks = document.querySelectorAll('.tab-link');
     const tabContents = document.querySelectorAll('.tab-content');
     tabLinks.forEach(link => {
@@ -46,7 +59,9 @@ function inicializarPainelAdmin() {
         });
     });
 
-    // --- SEÇÃO DE GERENCIAMENTO DE ANIMAIS ---
+    // ============================================================
+    // === 1. GERENCIAMENTO DE ANIMAIS (CRUD) ===
+    // ============================================================
     const animalForm = document.getElementById('animal-form');
     const animaisTableBody = document.getElementById('animais-table-body');
     const animalIdInput = document.getElementById('animal-id');
@@ -64,268 +79,279 @@ function inicializarPainelAdmin() {
 
     const carregarAnimais = async () => {
         animaisTableBody.innerHTML = '<tr><td colspan="5">Carregando...</td></tr>';
-        try {
-            const { data, error } = await supabaseClient.from('animais').select('*').order('id', { descending: true });
-            if (error) throw error;
-            animaisTableBody.innerHTML = '';
-            if (data.length === 0) {
-                animaisTableBody.innerHTML = '<tr><td colspan="5">Nenhum animal cadastrado.</td></tr>';
-            } else {
-                data.forEach(a => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${a.id}</td><td>${a.nome}</td><td>${a.especie}</td><td>${a.idade != null ? a.idade : 'N/A'}</td><td class="actions"><button class="btn-edit" data-id="${a.id}">Editar</button><button class="btn-delete" data-id="${a.id}">Excluir</button></td>`;
-                    animaisTableBody.appendChild(tr);
-                });
-            }
-        } catch (e) {
-            animaisTableBody.innerHTML = `<tr><td colspan="5" style="color:red;">Erro: ${e.message}</td></tr>`;
+        const { data, error } = await window.supabaseClient.from('animais').select('*').order('id', { descending: true });
+        
+        animaisTableBody.innerHTML = '';
+        if (error || !data || data.length === 0) {
+            animaisTableBody.innerHTML = '<tr><td colspan="5">Nenhum animal cadastrado.</td></tr>';
+        } else {
+            data.forEach(a => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${a.id}</td><td>${a.nome}</td><td>${a.especie}</td><td>${a.idade || '-'}</td><td class="actions"><button class="btn-edit" data-id="${a.id}">Editar</button><button class="btn-delete" data-id="${a.id}">Excluir</button></td>`;
+                animaisTableBody.appendChild(tr);
+            });
         }
     };
 
-    animalForm.addEventListener('submit', async e => {
-        e.preventDefault();
-        const submitButton = animalForm.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
-        submitButton.textContent = 'Salvando...';
+    if (animalForm) {
+        animalForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            const submitButton = animalForm.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Salvando...';
 
-        let imageUrl = '';
-        const animalId = animalIdInput.value;
-        const file = imgUploadInput.files[0];
+            let imageUrl = '';
+            const animalId = animalIdInput.value;
+            const file = imgUploadInput.files[0];
 
-        if (file) {
-            const fileName = `${Date.now()}-${file.name}`;
-            const { data: uploadData, error: uploadError } = await supabaseClient.storage.from('imagens_animais').upload(fileName, file);
-            if (uploadError) {
-                alert('Erro ao fazer upload da imagem: ' + uploadError.message);
-                submitButton.disabled = false;
-                submitButton.textContent = 'Salvar';
-                return;
+            // Upload de Imagem
+            if (file) {
+                const fileName = `${Date.now()}-${file.name}`;
+                const { data: uploadData, error: uploadError } = await window.supabaseClient.storage.from('imagens_animais').upload(fileName, file);
+                if (!uploadError) {
+                    const { data: urlData } = window.supabaseClient.storage.from('imagens_animais').getPublicUrl(uploadData.path);
+                    imageUrl = urlData.publicUrl;
+                }
             }
-            const { data: urlData } = supabaseClient.storage.from('imagens_animais').getPublicUrl(uploadData.path);
-            imageUrl = urlData.publicUrl;
-        }
 
-        const dadosAnimal = {
-            nome: document.getElementById('nome').value,
-            especie: document.getElementById('especie').value,
-            sexo: document.getElementById('sexo').value,
-            porte: document.getElementById('porte').value,
-            idade: document.getElementById('idade').value ? parseFloat(document.getElementById('idade').value) : null,
-            estado: document.getElementById('estado').value,
-            cidade: document.getElementById('cidade').value,
-            descricao: document.getElementById('descricao').value,
-        };
-        if (imageUrl) {
-            dadosAnimal.img = imageUrl;
-        }
+            const dadosAnimal = {
+                nome: document.getElementById('nome').value,
+                especie: document.getElementById('especie').value,
+                sexo: document.getElementById('sexo').value,
+                porte: document.getElementById('porte').value,
+                idade: document.getElementById('idade').value ? parseFloat(document.getElementById('idade').value) : null,
+                estado: document.getElementById('estado').value,
+                cidade: document.getElementById('cidade').value,
+                descricao: document.getElementById('descricao').value,
+            };
+            if (imageUrl) dadosAnimal.img = imageUrl;
 
-        try {
             const { error } = animalId
-                ? await supabaseClient.from('animais').update(dadosAnimal).eq('id', animalId)
-                : await supabaseClient.from('animais').insert([dadosAnimal]);
-            if (error) throw error;
-            alert('Animal salvo com sucesso!');
-            resetarFormulario();
-            carregarAnimais();
-        } catch (error) {
-            alert('Erro ao salvar os dados do animal: ' + error.message);
-        } finally {
+                ? await window.supabaseClient.from('animais').update(dadosAnimal).eq('id', animalId)
+                : await window.supabaseClient.from('animais').insert([dadosAnimal]);
+
+            if (!error) {
+                alert('Salvo com sucesso!');
+                resetarFormulario();
+                carregarAnimais();
+            } else {
+                alert('Erro: ' + error.message);
+            }
             submitButton.disabled = false;
             submitButton.textContent = 'Salvar';
-        }
-    });
+        });
 
-    cancelEditButton.addEventListener('click', resetarFormulario);
+        cancelEditButton.addEventListener('click', resetarFormulario);
 
-    animaisTableBody.addEventListener('click', async e => {
-        const btn = e.target.closest('button');
-        if (!btn) return;
-        const id = btn.dataset.id;
+        // Ações da Tabela (Editar/Excluir)
+        animaisTableBody.addEventListener('click', async e => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const id = btn.dataset.id;
 
-        if (btn.classList.contains('btn-edit')) {
-            const { data, error } = await supabaseClient.from('animais').select('*').eq('id', id).single();
-            if (error) return alert('Erro ao carregar dados do animal.');
-            animalIdInput.value = data.id;
-            document.getElementById('nome').value = data.nome || '';
-            document.getElementById('especie').value = data.especie || '';
-            document.getElementById('sexo').value = data.sexo || '';
-            document.getElementById('porte').value = data.porte || '';
-            document.getElementById('idade').value = data.idade || '';
-            document.getElementById('estado').value = data.estado || '';
-            document.getElementById('cidade').value = data.cidade || '';
-            document.getElementById('descricao').value = data.descricao || '';
-            formTitle.textContent = `Editando: ${data.nome}`;
-            animalForm.querySelector('button[type="submit"]').textContent = 'Atualizar';
-            cancelEditButton.style.display = 'inline-block';
-            animalForm.scrollIntoView({ behavior: 'smooth' });
-        }
-        if (btn.classList.contains('btn-delete')) {
-            const ok = await showConfirmationModal('Confirmar Exclusão', `Tem certeza que deseja excluir o animal com ID ${id}? Esta ação não pode ser desfeita.`);
-            if (ok) {
-                const { error } = await supabaseClient.from('animais').delete().eq('id', id);
-                if (error) alert('Erro: ' + error.message);
-                else { alert('Excluído com sucesso!'); carregarAnimais(); }
+            if (btn.classList.contains('btn-edit')) {
+                const { data } = await window.supabaseClient.from('animais').select('*').eq('id', id).single();
+                if (data) {
+                    animalIdInput.value = data.id;
+                    document.getElementById('nome').value = data.nome || '';
+                    document.getElementById('especie').value = data.especie || '';
+                    document.getElementById('sexo').value = data.sexo || '';
+                    document.getElementById('porte').value = data.porte || '';
+                    document.getElementById('idade').value = data.idade || '';
+                    document.getElementById('estado').value = data.estado || '';
+                    document.getElementById('cidade').value = data.cidade || '';
+                    document.getElementById('descricao').value = data.descricao || '';
+                    formTitle.textContent = `Editando: ${data.nome}`;
+                    animalForm.querySelector('button[type="submit"]').textContent = 'Atualizar';
+                    cancelEditButton.style.display = 'inline-block';
+                    animalForm.scrollIntoView({ behavior: 'smooth' });
+                }
             }
-        }
-    });
-    
-    // --- SEÇÃO DE PEDIDOS DE ADOÇÃO ---
+            if (btn.classList.contains('btn-delete')) {
+                if (confirm('Tem certeza que deseja excluir?')) {
+                    await window.supabaseClient.from('animais').delete().eq('id', id);
+                    carregarAnimais();
+                }
+            }
+        });
+    }
+
+    // ============================================================
+    // === 2. PEDIDOS DE ADOÇÃO (COM NOTIFICAÇÕES) ===
+    // ============================================================
     const pedidosContainer = document.getElementById('pedidos-container');
 
     const carregarPedidosAdocao = async () => {
         if (!pedidosContainer) return;
         pedidosContainer.innerHTML = '<p>Carregando pedidos...</p>';
-        try {
-            const { data, error } = await supabaseClient
-                .from('pedidos_adocao')
-                .select('*, animais(nome, id)')
-                .order('created_at', { ascending: false });
+        
+        // Busca pedidos e traz junto o nome do animal
+        const { data, error } = await window.supabaseClient
+            .from('pedidos_adocao')
+            .select('*, animais(nome, id)')
+            .order('created_at', { ascending: false });
 
-            if (error) throw error;
-            pedidosContainer.innerHTML = '';
-            
-            const pedidosPendentes = data.filter(p => p.status === 'pendente');
-            const outrosPedidos = data.filter(p => p.status !== 'pendente');
-
-            if (data.length === 0) {
-                pedidosContainer.innerHTML = '<p>Nenhum pedido de adoção encontrado.</p>';
-                return;
-            }
-
-            if(pedidosPendentes.length > 0) {
-                pedidosPendentes.forEach(p => pedidosContainer.appendChild(criarCardPedido(p)));
-            }
-            if(outrosPedidos.length > 0) {
-                 outrosPedidos.forEach(p => pedidosContainer.appendChild(criarCardPedido(p)));
-            }
-        } catch (e) {
-            pedidosContainer.innerHTML = `<p style="color:red;">Erro ao carregar pedidos: ${e.message}</p>`;
-        }
-    };
-    
-    const criarCardPedido = (pedido) => {
-        const card = document.createElement('div');
-        card.className = `pedido-card status-${pedido.status}`;
-        const animalInfo = pedido.animais ? `<strong>${pedido.animais.nome}</strong> (ID: ${pedido.animais.id})` : '<em>Animal não mais disponível</em>';
-        const acoesHtml = pedido.status === 'pendente' && pedido.animais
-            ? `<button class="btn-approve" data-id="${pedido.id}" data-animal-id="${pedido.animais.id}">Aprovar</button>
-               <button class="btn-reject" data-id="${pedido.id}">Rejeitar</button>`
-            : '';
-        card.innerHTML = `<h4>Pedido para: ${animalInfo}</h4><div class="pedido-details"><p><strong>Solicitante:</strong> ${pedido.nome_adotante}</p><p><strong>Email:</strong> ${pedido.email_adotante}</p><p><strong>Telefone:</strong> ${pedido.telefone_adotante}</p><p><strong>Status:</strong> <span class="status-text">${pedido.status.toUpperCase()}</span></p></div><div class="actions">${acoesHtml}</div>`;
-        return card;
-    };
-
-    const atualizarStatusPedido = async (pedidoId, novoStatus, animalId) => {
-        const { error: updateError } = await supabaseClient.from('pedidos_adocao').update({ status: novoStatus }).eq('id', pedidoId);
-        if (updateError) {
-            alert(`Erro ao atualizar status do pedido: ${updateError.message}`);
+        if (error || !data || data.length === 0) {
+            pedidosContainer.innerHTML = '<p>Nenhum pedido de adoção no momento.</p>';
             return;
         }
 
-        if (novoStatus === 'aprovado' && animalId) {
-            await supabaseClient.from('pedidos_adocao').update({ status: 'rejeitado' }).eq('animal_id', animalId).eq('status', 'pendente');
-            const { error: deleteError } = await supabaseClient.from('animais').delete().eq('id', animalId);
-            if (deleteError) {
-                alert(`Status atualizado, mas erro ao remover animal: ${deleteError.message}`);
+        pedidosContainer.innerHTML = '';
+        data.forEach(p => {
+            const nomePet = p.animais ? p.animais.nome : 'Animal não encontrado (Removido)';
+            const card = document.createElement('div');
+            card.className = `pedido-card status-${p.status}`;
+            
+            // Botões só aparecem se estiver Pendente
+            let botoesHtml = '';
+            if (p.status === 'pendente') {
+                botoesHtml = `
+                    <div class="actions">
+                        <button class="btn-approve" 
+                            data-id="${p.id}" 
+                            data-animal-id="${p.animal_id}" 
+                            data-user-id="${p.user_id}"
+                            data-nome-pet="${nomePet}">Aprovar Adoção</button>
+                        <button class="btn-reject" 
+                            data-id="${p.id}"
+                            data-user-id="${p.user_id}"
+                            data-nome-pet="${nomePet}">Rejeitar</button>
+                    </div>
+                `;
             }
-        }
-        
-        alert(`Pedido #${pedidoId} foi marcado como "${novoStatus}"!`);
-        await carregarPedidosAdocao();
-        await carregarAnimais();
+
+            card.innerHTML = `
+                <h4>Pedido para: <strong>${nomePet}</strong></h4>
+                <div class="pedido-info">
+                    <p><strong>Solicitante:</strong> ${p.nome_adotante}</p>
+                    <p><strong>CPF:</strong> ${p.cpf || '-'} | <strong>Cidade:</strong> ${p.cidade || '-'}</p>
+                    <p><strong>Telefone:</strong> ${p.telefone_adotante}</p>
+                    <p><strong>Motivo:</strong> ${p.mensagem_motivacao}</p>
+                    <p><strong>Status:</strong> <span class="status-badge">${p.status.toUpperCase()}</span></p>
+                </div>
+                ${botoesHtml}
+            `;
+            pedidosContainer.appendChild(card);
+        });
     };
-    
+
+    // Lógica de Decisão (Aprovar/Rejeitar)
+    const processarDecisaoAdocao = async (pedidoId, decisao, animalId, userId, nomeAnimal) => {
+        const loadingMsg = decisao === 'aprovado' ? 'Processando Aprovação...' : 'Rejeitando...';
+        console.log(loadingMsg);
+
+        try {
+            if (decisao === 'aprovado') {
+                // 1. Notificar Usuário
+                await window.supabaseClient.from('notificacoes').insert([{
+                    user_id: userId,
+                    mensagem: `PARABÉNS! Seu pedido de adoção para ${nomeAnimal} foi APROVADO! Nossa equipe entrará em contato pelo telefone informado para combinar a busca.`
+                }]);
+
+                // 2. Apagar o Animal (Adotado!)
+                const { error: errAnimal } = await window.supabaseClient.from('animais').delete().eq('id', animalId);
+                if (errAnimal) throw new Error('Erro ao remover animal: ' + errAnimal.message);
+
+                // 3. Apagar o Pedido
+                await window.supabaseClient.from('pedidos_adocao').delete().eq('id', pedidoId);
+
+                alert(`Sucesso! ${nomeAnimal} foi adotado e removido do site. O usuário foi notificado.`);
+            } else {
+                // REJEITADO
+                // 1. Notificar Usuário
+                await window.supabaseClient.from('notificacoes').insert([{
+                    user_id: userId,
+                    mensagem: `Olá. Agradecemos seu interesse em adotar ${nomeAnimal}, mas infelizmente seu pedido não pôde ser aceito neste momento.`
+                }]);
+
+                // 2. Apagar o Pedido
+                await window.supabaseClient.from('pedidos_adocao').delete().eq('id', pedidoId);
+
+                alert('Pedido rejeitado. O usuário foi notificado.');
+            }
+
+            // Recarregar listas
+            carregarPedidosAdocao();
+            carregarAnimais();
+
+        } catch (error) {
+            alert('Erro ao processar: ' + error.message);
+            console.error(error);
+        }
+    };
+
+    // Event Listener dos Botões de Pedido
     if (pedidosContainer) {
         pedidosContainer.addEventListener('click', async e => {
             const btn = e.target.closest('button');
             if (!btn) return;
-            const pedidoId = btn.dataset.id;
+
+            const id = btn.dataset.id;
             const animalId = btn.dataset.animalId;
+            const userId = btn.dataset.userId;
+            const nomePet = btn.dataset.nomePet;
+
             if (btn.classList.contains('btn-approve')) {
-                const ok = await showConfirmationModal('Aprovar Adoção?', `Isso removerá o animal da lista pública e rejeitará outros pedidos para ele. Deseja continuar?`);
-                if (ok) await atualizarStatusPedido(pedidoId, 'aprovado', animalId);
+                if (confirm(`Confirmar adoção de ${nomePet}? O animal será removido da lista pública.`)) {
+                    await processarDecisaoAdocao(id, 'aprovado', animalId, userId, nomePet);
+                }
             } else if (btn.classList.contains('btn-reject')) {
-                const ok = await showConfirmationModal('Rejeitar Pedido?', `Tem certeza que deseja rejeitar este pedido de adoção?`);
-                if (ok) await atualizarStatusPedido(pedidoId, 'rejeitado', null);
+                if (confirm(`Rejeitar pedido para ${nomePet}?`)) {
+                    await processarDecisaoAdocao(id, 'rejeitado', null, userId, nomePet);
+                }
             }
         });
     }
 
-    // --- SEÇÃO DE MENSAGENS DE CONTATO ---
+    // ============================================================
+    // === 3. MENSAGENS DE CONTATO ===
+    // ============================================================
     const mensagensContainer = document.getElementById('mensagens-container');
 
     const carregarMensagens = async () => {
         if (!mensagensContainer) return;
-        mensagensContainer.innerHTML = '<p>Carregando mensagens...</p>';
-        try {
-            const { data, error } = await supabaseClient.from('mensagens_contato').select('*').order('created_at', { descending: true });
-            if (error) throw error;
-            mensagensContainer.innerHTML = '';
-            if (data.length === 0) {
-                mensagensContainer.innerHTML = '<p>Nenhuma mensagem de contato recebida.</p>';
-            } else {
-                data.forEach(msg => mensagensContainer.appendChild(criarCardMensagem(msg)));
-            }
-        } catch (e) {
-            mensagensContainer.innerHTML = `<p style="color:red;">Erro ao carregar mensagens: ${e.message}</p>`;
+        mensagensContainer.innerHTML = '<p>Carregando...</p>';
+        const { data, error } = await window.supabaseClient.from('mensagens_contato').select('*').order('created_at', { descending: true });
+        
+        mensagensContainer.innerHTML = '';
+        if (error || !data || data.length === 0) {
+            mensagensContainer.innerHTML = '<p>Nenhuma mensagem.</p>';
+        } else {
+            data.forEach(msg => {
+                const card = document.createElement('div');
+                card.className = `mensagem-card ${msg.lida ? '' : 'nao-lida'}`;
+                card.innerHTML = `
+                    <h4>${msg.assunto}</h4>
+                    <p><small>${msg.email} - ${new Date(msg.created_at).toLocaleString()}</small></p>
+                    <p>${msg.mensagem}</p>
+                    <div class="actions">
+                        ${!msg.lida ? `<button class="btn-approve" data-id="${msg.id}">Marcar como Lida</button>` : '<span>(Lida)</span>'}
+                        <button class="btn-delete" data-id="${msg.id}">Excluir</button>
+                    </div>
+                `;
+                mensagensContainer.appendChild(card);
+            });
         }
-    };
-    
-    const criarCardMensagem = (msg) => {
-        const card = document.createElement('div');
-        card.className = `mensagem-card ${!msg.lida ? 'nao-lida' : ''}`;
-        const dataFormatada = new Date(msg.created_at).toLocaleString('pt-BR');
-        card.innerHTML = `<h4>${msg.assunto}</h4><div class="msg-meta">De: ${msg.nome} (${msg.email}) em ${dataFormatada}</div><div class="msg-body">${msg.mensagem}</div><div class="actions">${!msg.lida ? `<button class="btn-approve" data-id="${msg.id}">Marcar como Lida</button>` : ''}<button class="btn-delete" data-id="${msg.id}">Excluir</button></div>`;
-        return card;
     };
 
     if (mensagensContainer) {
         mensagensContainer.addEventListener('click', async e => {
             const btn = e.target.closest('button');
             if (!btn) return;
-            const msgId = btn.dataset.id;
-            if (btn.classList.contains('btn-approve')) { // Usando a classe 'btn-approve' para "Marcar como Lida"
-                const { error } = await supabaseClient.from('mensagens_contato').update({ lida: true }).eq('id', msgId);
-                if (error) alert('Erro ao marcar como lida: ' + error.message);
-                else carregarMensagens();
+            const id = btn.dataset.id;
+
+            if (btn.classList.contains('btn-approve')) {
+                await window.supabaseClient.from('mensagens_contato').update({ lida: true }).eq('id', id);
+                carregarMensagens();
             }
             if (btn.classList.contains('btn-delete')) {
-                const ok = await showConfirmationModal('Excluir Mensagem?', 'Esta ação não pode ser desfeita.');
-                if (ok) {
-                    const { error } = await supabaseClient.from('mensagens_contato').delete().eq('id', msgId);
-                    if (error) alert('Erro ao excluir: ' + error.message);
-                    else carregarMensagens();
+                if (confirm('Excluir mensagem?')) {
+                    await window.supabaseClient.from('mensagens_contato').delete().eq('id', id);
+                    carregarMensagens();
                 }
             }
         });
     }
-
-    // --- FUNÇÃO DO MODAL DE CONFIRMAÇÃO ---
-    const showConfirmationModal = (title, text) => {
-        return new Promise(resolve => {
-            const modal = document.getElementById('confirm-modal');
-            modal.querySelector('#modal-title').textContent = title;
-            modal.querySelector('#modal-text').textContent = text;
-            modal.classList.add('show');
-            
-            const confirmBtn = modal.querySelector('#modal-confirm-btn');
-            const cancelBtn = modal.querySelector('#modal-cancel-btn');
-
-            const close = (result) => {
-                modal.classList.remove('show');
-                // Clonar e substituir os botões para remover listeners antigos
-                const newConfirmBtn = confirmBtn.cloneNode(true);
-                confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
-                const newCancelBtn = cancelBtn.cloneNode(true);
-                cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
-                
-                resolve(result);
-            };
-
-            modal.querySelector('#modal-confirm-btn').onclick = () => close(true);
-            modal.querySelector('#modal-cancel-btn').onclick = () => close(false);
-        });
-    };
 
     // --- CARREGAMENTO INICIAL DE DADOS ---
     carregarAnimais();

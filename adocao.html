@@ -49,59 +49,79 @@
     </div>
 </header>
 
-    <main>
-        <div class="container">
-            <section class="adocao-intro">
-                <h1>Encontre seu Novo Amigo</h1>
-                <p class="section-intro-text">
-                    Cada um desses anjinhos tem uma história e todos estão em busca de um lar cheio de amor e carinho.
-                    Explore os perfis abaixo e veja quem conquista o seu coração!
-                </p>
-            </section>
+<main>
+    <div class="container">
+        <section class="adocao-intro">
+            <h1>Encontre seu Novo Amigo</h1>
+            <p class="section-intro-text">
+                Cada um desses anjinhos tem uma história e todos estão em busca de um lar cheio de amor e carinho.
+            </p>
+        </section>
 
-            <section class="animais-disponiveis" id="animais-disponiveis">
-                <div class="container">
-                    <h2>Todos os Nossos Anjinhos</h2>
-                    <div class="animais-grid" id="animais-grid">
-                        <p>Carregando animais...</p> 
+        <!-- LISTA DE ANIMAIS -->
+        <section class="animais-disponiveis" id="animais-disponiveis">
+            <div class="container">
+                <h2>Todos os Nossos Anjinhos</h2>
+                <div class="animais-grid" id="animais-grid">
+                    <p>Carregando animais...</p> 
+                </div>
+            </div>
+        </section>
+
+        <!-- FORMULÁRIO (Começa escondido pelo CSS) -->
+        <section class="adocao-form-section" id="adocao-form-section">
+            <h2 id="adocao-form-title">Formulário de Adoção</h2>
+            <p class="section-intro-text">Preencha os dados abaixo para analisarmos seu perfil.</p>
+
+            <form class="adocao-form" id="adocao-form">
+                <input type="hidden" id="animal-id-hidden-input" name="animal_id">
+
+                <div class="form-group">
+                    <label for="nome-adotante">Nome Completo:</label>
+                    <input type="text" id="nome-adotante" required placeholder="Seu nome">
+                </div>
+
+                <!-- Novos Campos -->
+                <div class="grid-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label for="cpf-adotante">CPF:</label>
+                        <input type="text" id="cpf-adotante" required placeholder="000.000.000-00">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone-adotante">Telefone/WhatsApp:</label>
+                        <input type="tel" id="telefone-adotante" required placeholder="(XX) 99999-9999">
                     </div>
                 </div>
-            </section>
 
-            <section class="adocao-form-section" id="adocao-form-section" style="display: none;">
-                <h2 id="adocao-form-title">Formulário de Adoção</h2>
-                <p class="section-intro-text">
-                    Ficamos felizes com seu interesse! Por favor, preencha o formulário abaixo com atenção.
-                    Nosso time analisará seu perfil e entrará em contato.
-                </p>
-                <form class="adocao-form" id="adocao-form">
-    <input type="hidden" id="animal-id-hidden-input" name="animal_id">
+                <div class="grid-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label for="cidade-adotante">Cidade:</label>
+                        <input type="text" id="cidade-adotante" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="endereco-adotante">Endereço Completo:</label>
+                        <input type="text" id="endereco-adotante" required placeholder="Rua, Número, Bairro">
+                    </div>
+                </div>
 
-    <div class="form-group">
-        <label for="nome-adotante">Seu Nome Completo:</label>
-        <input type="text" id="nome-adotante" name="nome_completo" required placeholder="Digite seu nome">
-    </div>
-    <div class="form-group">
-        <label for="email-adotante">Seu Melhor E-mail:</label>
-        <input type="email" id="email-adotante" name="email" required placeholder="exemplo@email.com">
-    </div>
-    <div class="form-group">
-        <label for="telefone-adotante">Telefone (com DDD):</label>
-        <input type="tel" id="telefone-adotante" name="telefone" required placeholder="(XX) XXXXX-XXXX">
-    </div>
-    <div class="form-group">
-        <label for="mensagem-adotante">Por que você gostaria de adotar este pet?</label>
-        <textarea id="mensagem-adotante" name="mensagem" rows="5" required placeholder="Conte-nos um pouco sobre você, sua casa e sua motivação."></textarea>
-    </div>
+                <div class="form-group">
+                    <label for="email-adotante">E-mail:</label>
+                    <input type="email" id="email-adotante" required>
+                </div>
 
-    <div class="form-buttons">
-        <button type="submit">Enviar Pedido de Adoção</button>
-        <button type="button" class="cancel-button" id="cancel-button">Cancelar</button>
+                <div class="form-group">
+                    <label for="mensagem-adotante">Por que você quer adotar?</label>
+                    <textarea id="mensagem-adotante" rows="4" required placeholder="Conte sobre sua motivação..."></textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit">Enviar Pedido</button>
+                    <button type="button" class="cancel-button" id="cancel-button">Cancelar</button>
+                </div>
+            </form>
+        </section>
     </div>
-</form>
-            </section>
-        </div>
-    </main>
+</main>
 
         <footer>
         <div class="container">
@@ -131,10 +151,9 @@
             <p>© 2024 Adopet - Projeto Integrador. </p>
         </div>
     </footer>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/script.js"></script>
     <script src="js/auth-ui.js"></script>
     <script src="js/casinha-global.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/admin-script.js"></script>
 </body>
 </html>

@@ -1,74 +1,76 @@
-// js/auth-ui.js - VERSÃO OTIMIZADA
+// js/auth-ui.js
+console.log("Iniciando auth-ui.js...");
 
-// 1. CRIA O CLIENTE SUPABASE E O TORNA ACESSÍVEL GLOBALMENTE
-// Garantimos que a inicialização aconteça apenas uma vez.
-if (typeof window.supabaseClient === 'undefined') {
-    if (typeof supabase === 'undefined') {
-        alert("ERRO GRAVE: A biblioteca principal do Supabase não foi carregada. Verifique o link do CDN no HTML.");
-    } else {
-        const SUPABASE_URL = 'https://fcozxgnwoubuqiynmwwr.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTkMPVq78MTdbJc-zCTqRTDsla7m7pc4sH3PFn0';
-        const { createClient } = supabase;
-        // Anexamos o cliente ao objeto window para que ele seja global
-        window.supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    }
+// 1. Definição das credenciais (Centralizado)
+const SUPABASE_URL = 'https://fcozxgnwoubuqiynmwwr.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTkMPVq78MTdbJc-zCTqRTDsla7m7pc4sH3PFn0';
+
+// 2. Validação se a biblioteca carregou
+if (typeof supabase === 'undefined') {
+    console.error("ERRO CRÍTICO: A biblioteca do Supabase não foi carregada no HTML (CDN).");
+    alert("Erro de sistema: Biblioteca não carregada.");
+} else {
+    // 3. Criação do Cliente Global
+    window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log("Supabase Client criado com sucesso.");
 }
 
-// 2. LÓGICA DE UI PARA ELEMENTOS GLOBAIS (HEADER)
+// 4. Lógica de Interface do Usuário (Header)
 document.addEventListener('DOMContentLoaded', () => {
-    // Verificação de segurança
-    if (typeof window.supabaseClient === 'undefined') return;
-
     const profileIcon = document.getElementById('user-profile-icon');
     const loginButton = document.getElementById('login-link-button');
     const adminLinkLi = document.getElementById('admin-link-li');
+    const casinhaIcon = document.getElementById('casinha-icon');
 
-    async function checkIsAdmin(user) {
-        if (!user) return false;
-        try {
-            const { data, error } = await window.supabaseClient
-                .from('usuarios')
-                .select('is_admin')
-                .eq('id', user.id)
-                .single();
-            if (error) {
-                // Se o erro for "0 rows", não é um erro crítico, apenas o usuário não está na tabela 'usuarios' ainda.
-                if (error.code !== 'PGRST116') console.error("Erro ao verificar admin:", error);
-                return false;
-            }
-            return data ? data.is_admin : false;
-        } catch (error) {
-            console.error("Exceção ao verificar admin:", error);
-            return false;
-        }
-    }
+    // Dentro de js/auth-ui.js
 
     async function updateUserUI(user) {
         if (!profileIcon || !loginButton || !adminLinkLi) return;
 
-        const isAdmin = await checkIsAdmin(user);
-
         if (user) {
-            profileIcon.style.display = 'block';
+            // Usuário logado
+            profileIcon.style.display = 'inline-block';
             loginButton.style.display = 'none';
-            adminLinkLi.style.display = isAdmin ? 'list-item' : 'none';
+            
+            // --- TENTATIVA SEGURA DE VERIFICAR ADMIN ---
+            try {
+                // Tenta buscar o perfil
+                const { data, error } = await window.supabaseClient
+                    .from('usuarios')
+                    .select('is_admin')
+                    .eq('id', user.id)
+                    .maybeSingle(); // <--- USA maybeSingle EM VEZ DE single PARA EVITAR ERRO 406
+
+                // Se houver erro ou não houver dados, assumimos FALSE
+                if (error || !data) {
+                    console.log("Usuário sem perfil de admin ou perfil inexistente.");
+                    adminLinkLi.style.display = 'none';
+                } else if (data.is_admin) {
+                    adminLinkLi.style.display = 'inline-block'; // É admin!
+                } else {
+                    adminLinkLi.style.display = 'none'; // Existe, mas não é admin
+                }
+            } catch (err) {
+                console.warn("Falha na verificação de admin (Ignorado):", err);
+                adminLinkLi.style.display = 'none';
+            }
         } else {
+            // Usuário deslogado
             profileIcon.style.display = 'none';
-            loginButton.style.display = 'block';
+            loginButton.style.display = 'inline-block';
             adminLinkLi.style.display = 'none';
         }
     }
-    
-    // Ouve as mudanças de autenticação e atualiza a UI do header
-    window.supabaseClient.auth.onAuthStateChange((event, session) => {
-        updateUserUI(session ? session.user : null);
-    });
 
-    // Força uma verificação inicial para o caso da sessão já existir
-    // (útil para quando o usuário recarrega a página)
-    async function initializeSessionUI() {
-        const { data: { session } } = await window.supabaseClient.auth.getSession();
-        updateUserUI(session ? session.user : null);
+    // Ouvinte de estado de autenticação
+    if (window.supabaseClient) {
+        window.supabaseClient.auth.onAuthStateChange((event, session) => {
+            updateUserUI(session ? session.user : null);
+        });
+        
+        // Verificação inicial
+        window.supabaseClient.auth.getSession().then(({ data: { session } }) => {
+            updateUserUI(session ? session.user : null);
+        });
     }
-    initializeSessionUI();
 });

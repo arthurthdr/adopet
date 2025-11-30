@@ -92,10 +92,19 @@
                         <label for="bio-input">Sua Biografia</label>
                         <textarea id="bio-input" rows="4"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="avatar_url-input">URL da Foto de Perfil</label>
-                        <input type="text" id="avatar_url-input">
-                    </div>
+                    <!-- ... inputs de nome e bio acima ... -->
+
+<div class="form-group">
+    <label for="avatar-upload">Foto de Perfil:</label>
+    <!-- type="file" permite abrir o explorador de arquivos -->
+    <input type="file" id="avatar-upload" accept="image/*">
+    <p style="font-size: 0.8em; color: #666; margin-top: 5px;">Escolha uma imagem (JPG, PNG) do seu computador.</p>
+    
+    <!-- Input oculto para manter a URL antiga caso o usuário não troque a foto -->
+    <input type="hidden" id="current-avatar-url">
+</div>
+
+
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                         <button type="button" id="cancel-edit-btn" class="btn btn-secondary">Cancelar</button>
@@ -106,6 +115,22 @@
                 <div class="profile-actions" id="main-profile-actions">
                     <button id="edit-profile-btn" class="btn btn-primary">Editar Perfil</button>
                     <button id="logout-button" class="btn btn-secondary">Sair</button>
+                </div>
+                <!-- Área de Notificações -->
+                    <div id="notificacoes-container" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                        <h3><i class="fas fa-bell"></i> Notificações</h3>
+                        <!-- ... formulário e botões acima ... -->
+
+<!-- ÁREA DE NOTIFICAÇÕES (Copie isso) -->
+<div id="notificacoes-section" style="margin-top: 40px; border-top: 1px solid #ddd; padding-top: 20px;">
+    <h3 style="color: var(--primary-color);"><i class="fas fa-bell"></i> Minhas Notificações</h3>
+    
+    <div id="lista-notificacoes">
+        <p>Carregando...</p>
+    </div>
+</div>
+
+<!-- ... </div> fecha profile-main abaixo ... -->
                 </div>
             </div>
         </div>
@@ -144,7 +169,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/auth-ui.js"></script>
     <script src="js/casinha-global.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/admin-script.js"></script>
+    <script src="js/perfil-script.js"></script> 
 </body>
 </html>

@@ -1,9 +1,9 @@
-// js/auth.js - Lógica de Login e Registro
+// js/auth.js - Lógica de Login e Registro (CORRIGIDO)
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Valida se o cliente Supabase global, criado pelo auth-ui.js, existe.
-    if (typeof supabaseClient === 'undefined') {
-        console.error("Supabase client não encontrado. auth-ui.js deve ser carregado primeiro.");
+    // Verifica se a conexão global existe
+    if (!window.supabaseClient) {
+        console.error("ERRO: supabaseClient não encontrado. Verifique se auth-ui.js foi carregado.");
         return;
     }
 
@@ -13,53 +13,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- LÓGICA DE LOGIN ---
     if (loginForm) {
+        console.log("Formulário de login detectado. Preparando...");
+
         loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Impede o recarregamento da página
+            event.preventDefault(); // IMPEDE A PÁGINA DE RECARREGAR (Crucial!)
+            console.log("Botão de login clicado.");
 
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             const submitButton = loginForm.querySelector('button');
 
-            // Desabilita o botão para evitar múltiplos envios
+            // Feedback visual
             submitButton.disabled = true;
             submitButton.textContent = 'Entrando...';
-            messageDiv.textContent = ''; // Limpa mensagens anteriores
+            if (messageDiv) {
+                messageDiv.textContent = '';
+                messageDiv.className = '';
+            }
 
             try {
-                const { data, error } = await supabaseClient.auth.signInWithPassword({
+                // Tenta fazer o login
+                const { data, error } = await window.supabaseClient.auth.signInWithPassword({
                     email: email,
                     password: password,
                 });
 
                 if (error) {
-                    // Transforma o erro técnico em uma mensagem amigável
-                    if (error.message.includes("Invalid login credentials")) {
-                        messageDiv.textContent = 'Email ou senha inválidos. Por favor, tente novamente.';
+                    console.error("Erro no login:", error);
+                    // Traduz erros comuns
+                    let msg = error.message;
+                    if (msg.includes("Invalid login credentials")) msg = "Email ou senha incorretos.";
+                    
+                    if (messageDiv) {
+                        messageDiv.textContent = msg;
+                        messageDiv.className = 'error';
                     } else {
-                        messageDiv.textContent = 'Erro ao fazer login: ' + error.message;
+                        alert(msg);
                     }
-                    messageDiv.className = 'error';
                 } else if (data.user) {
-                    // Sucesso! Redireciona para a página de perfil.
-                    messageDiv.textContent = 'Login bem-sucedido! Redirecionando...';
-                    messageDiv.className = 'success';
-                    window.location.href = 'perfil.html';
+                    console.log("Login sucesso!", data.user);
+                    if (messageDiv) {
+                        messageDiv.textContent = 'Sucesso! Redirecionando...';
+                        messageDiv.className = 'success';
+                    }
+                    // Redireciona para o perfil após 1 segundo
+                    setTimeout(() => {
+                        window.location.href = 'perfil.html';
+                    }, 1000);
                 }
             } catch (e) {
-                messageDiv.textContent = 'Ocorreu um erro inesperado. Tente novamente.';
-                messageDiv.className = 'error';
+                console.error("Erro inesperado:", e);
+                if (messageDiv) messageDiv.textContent = 'Erro inesperado. Veja o console.';
             } finally {
-                // Reabilita o botão
                 submitButton.disabled = false;
                 submitButton.textContent = 'Entrar';
             }
         });
     }
 
-    // --- LÓGICA DE REGISTRO ---
+    // --- LÓGICA DE REGISTRO (Para a página register.html) ---
     if (registerForm) {
         registerForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
+            event.preventDefault(); // IMPEDE RECARREGAMENTO
 
             const username = document.getElementById('reg-username').value;
             const email = document.getElementById('reg-email').value;
@@ -67,17 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const confirmPassword = document.getElementById('reg-confirm-password').value;
             const submitButton = registerForm.querySelector('button');
             
-            messageDiv.textContent = ''; // Limpa mensagens
+            if (messageDiv) messageDiv.textContent = '';
 
-            // Validação de senha no front-end
             if (password !== confirmPassword) {
-                messageDiv.textContent = 'As senhas não coincidem!';
-                messageDiv.className = 'error';
-                return;
-            }
-            if (password.length < 6) {
-                messageDiv.textContent = 'A senha deve ter no mínimo 6 caracteres.';
-                messageDiv.className = 'error';
+                if(messageDiv) {
+                    messageDiv.textContent = 'As senhas não coincidem!';
+                    messageDiv.className = 'error';
+                } else { alert('As senhas não coincidem!'); }
                 return;
             }
 
@@ -85,29 +96,44 @@ document.addEventListener('DOMContentLoaded', () => {
             submitButton.textContent = 'Cadastrando...';
 
             try {
-                const { data, error } = await supabaseClient.auth.signUp({
+                // 1. Cria o usuário na autenticação (Auth)
+                const { data, error } = await window.supabaseClient.auth.signUp({
                     email: email,
                     password: password,
                     options: {
-                        // Guarda o nome de usuário nos metadados do usuário
-                        data: {
-                            nome_usuario: username
-                        }
+                        data: { nome_usuario: username } // Salva no metadata
                     }
                 });
 
-                if (error) {
-                    messageDiv.textContent = 'Erro no cadastro: ' + error.message;
-                    messageDiv.className = 'error';
-                } else if (data.user) {
-                    // IMPORTANTE: Supabase envia um email de confirmação por padrão.
-                    messageDiv.innerHTML = 'Cadastro realizado com sucesso! <br> Verifique seu e-mail para confirmar a conta antes de fazer o login.';
-                    messageDiv.className = 'success';
-                    registerForm.reset(); // Limpa o formulário
+                if (error) throw error;
+
+                // 2. Tenta inserir na tabela 'usuarios' (Opcional, mas recomendado se você usa essa tabela)
+                if (data.user) {
+                    const { error: dbError } = await window.supabaseClient
+                        .from('usuarios')
+                        .insert([{ 
+                            id: data.user.id, 
+                            nome_usuario: username,
+                            email: email 
+                        }]);
+                        
+                    if(dbError) console.warn("Aviso: Erro ao salvar na tabela usuarios (pode ser duplicidade ou permissão):", dbError);
+
+                    if(messageDiv) {
+                        messageDiv.innerHTML = 'Cadastro realizado! <br> Verifique seu email para confirmar.';
+                        messageDiv.className = 'success';
+                    } else {
+                        alert("Cadastro realizado! Verifique seu email.");
+                    }
+                    registerForm.reset();
                 }
+
             } catch (e) {
-                messageDiv.textContent = 'Ocorreu um erro inesperado. Tente novamente.';
-                messageDiv.className = 'error';
+                console.error(e);
+                if(messageDiv) {
+                    messageDiv.textContent = 'Erro: ' + e.message;
+                    messageDiv.className = 'error';
+                }
             } finally {
                 submitButton.disabled = false;
                 submitButton.textContent = 'Cadastrar';
