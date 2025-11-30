@@ -1,24 +1,15 @@
-// js/auth-ui.js - VERSÃO OTIMIZADA
-
-// 1. CRIA O CLIENTE SUPABASE E O TORNA ACESSÍVEL GLOBALMENTE
-// Garantimos que a inicialização aconteça apenas uma vez.
-if (typeof window.supabaseClient === 'undefined') {
-    if (typeof supabase === 'undefined') {
-        alert("ERRO GRAVE: A biblioteca principal do Supabase não foi carregada. Verifique o link do CDN no HTML.");
-    } else {
-        const SUPABASE_URL = 'https://fcozxgnwoubuqiynmwwr.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTkMPVq78MTdbJc-zCTqRTDsla7m7pc4sH3PFn0';
-        const { createClient } = supabase;
-        // Anexamos o cliente ao objeto window para que ele seja global
-        window.supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    }
+if (typeof supabase === 'undefined') {
+    alert("ERRO GRAVE: Biblioteca do Supabase não carregada.");
 }
 
-// 2. LÓGICA DE UI PARA ELEMENTOS GLOBAIS (HEADER)
-document.addEventListener('DOMContentLoaded', () => {
-    // Verificação de segurança
-    if (typeof window.supabaseClient === 'undefined') return;
+// CRIA A CONEXÃO COMO UMA VARIÁVEL GLOBAL
+const SUPABASE_URL = 'https://fcozxgnwoubuqiynmwwr.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTkMPVq78MTdbJc-zCTqRTDsla7m7pc4sH3PFn0';
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// A lógica de UI continua normalmente
+document.addEventListener('DOMContentLoaded', () => {
     const profileIcon = document.getElementById('user-profile-icon');
     const loginButton = document.getElementById('login-link-button');
     const adminLinkLi = document.getElementById('admin-link-li');
