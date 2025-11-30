@@ -81,7 +81,84 @@
             <p>© 2024 Adopet - Projeto Integrador. </p>
         </div>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+    const SUPABASE_URL = 'https://fcozxgnwoubuqiynmwwr.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjb3p4Z253b3VidXFpeW5td3dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODQyNDMsImV4cCI6MjA2NjM2MDI0M30.bg-bRTkMPVq78MTdbJc-zCTqRTDsla7m7pc4sH3PFn0';    
+    // Valida se a biblioteca principal do Supabase foi carregada
+    if (typeof supabase === 'undefined') {
+        alert("Erro crítico: A biblioteca do Supabase não foi carregada. Verifique a conexão com a internet e o link do CDN.");
+    }
+
+    const { createClient } = supabase;
+    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    console.log("Register page: Script loaded e cliente Supabase inicializado.");
+
+    const registerForm = document.getElementById('register-form');
+    const messageDiv = document.getElementById('message');
+
+    if (registerForm && messageDiv) {
+        registerForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            messageDiv.textContent = '';
+            messageDiv.className = '';
+
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+            const username = document.getElementById('reg-username').value;
+
+            if (!email || !password || !username) {
+                messageDiv.textContent = 'Nome de usuário, email e senha são obrigatórios!';
+                messageDiv.className = 'error'; return;
+            }
+            if (password !== confirmPassword) {
+                messageDiv.textContent = 'As senhas não coincidem!';
+                messageDiv.className = 'error'; return;
+            }
+            if (password.length < 6) {
+                messageDiv.textContent = 'A senha deve ter pelo menos 6 caracteres.';
+                messageDiv.className = 'error'; return;
+            }
+
+            messageDiv.textContent = 'Registrando...';
+
+            try {
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: { nome_usuario: username },
+                        // A OPÇÃO DE EMERGÊNCIA PARA EVITAR O ERRO 500
+                        emailRedirectTo: `${window.location.origin}`
+                    }
+                });
+
+                if (error) {
+                    throw error;
+                }
+                
+                if (data.user) {
+                    let successMsg = 'Cadastro realizado com sucesso!';
+                    messageDiv.textContent = successMsg + ' Redirecionando para login...';
+                    messageDiv.className = 'success';
+                    setTimeout(() => { window.location.href = 'login.html'; }, 3000);
+                } else {
+                    // Este caso geralmente acontece se o usuário já existe mas a confirmação está pendente
+                    messageDiv.textContent = 'Ocorreu um problema no cadastro. Verifique se o e-mail já está em uso ou tente novamente.';
+                    messageDiv.className = 'error';
+                }
+
+            } catch (error) {
+                console.error("Erro na chamada de signUp:", error);
+                // Exibe a mensagem de erro exata vinda do Supabase
+                messageDiv.textContent = `Erro no cadastro: ${error.message}`;
+                messageDiv.className = 'error';
+            }
+        });
+    }
+</script>
     <script src="js/auth-ui.js"></script>
     <script src="js/casinha-global.js"></script>
     <script src="js/auth.js"></script>
